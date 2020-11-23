@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.su_box_cell.view.*
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
-    private val cells = Array(9) { arrayOfNulls<SUBoxCell>(9) } // [列][行]
+    val cells = Array(9) { arrayOfNulls<SUBoxCell>(9) } // [列][行]
 
     init {
         createCells()
@@ -33,7 +33,6 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 val cell = SUBoxCell(context, x, y)
                 cell.id = 100 + y * 10 + x
                 cells[y][x] = cell
-                cell.center_number_text.text = cell.id.toString()
                 addView(cell)
 
                 val width = metrics.widthPixels / (MAX_ROWS + 1)

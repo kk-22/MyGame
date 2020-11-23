@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 
 class SUFooterBar(context : Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
-    private val numberButtons: List<ToggleButton>
+    val numberButtons: List<ToggleButton>
     init {
         View.inflate(context, R.layout.su_footer_bar, this)
 
@@ -20,5 +20,9 @@ class SUFooterBar(context : Context, attributeSet: AttributeSet) : ConstraintLay
         findViewById<Button>(R.id.clear_button).setOnClickListener {
             numberButtons.forEach { toggleButton -> toggleButton.isChecked = false }
         }
+    }
+
+    fun selectingNumbers(): List<String> {
+        return numberButtons.mapNotNull { if (it.isChecked) it.textOn as String else null }
     }
 }
