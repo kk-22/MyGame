@@ -10,6 +10,7 @@
         android:id="@+id/input_table"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#00ff00"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintBottom_toTopOf="@+id/footer_bar"
         app:layout_constraintEnd_toEndOf="parent"
