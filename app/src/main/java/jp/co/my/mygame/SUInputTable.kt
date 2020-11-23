@@ -13,7 +13,6 @@ import kotlinx.android.synthetic.main.su_box_cell.view.*
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
     private val cells = Array(9) { arrayOfNulls<SUBoxCell>(9) } // [列][行]
-    private val MAX_ROWS: Int = 9
 
     init {
         createCells()
@@ -37,9 +36,11 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 cell.center_number_text.text = cell.id.toString()
                 addView(cell)
 
-                constraintSet.setDimensionRatio(cell.id, "1:1")
-                constraintSet.constrainWidth(cell.id, metrics.widthPixels / 9)
-                constraintSet.constrainHeight(cell.id, 0)
+                val width = metrics.widthPixels / (MAX_ROWS + 1)
+                constraintSet.constrainWidth(cell.id, width)
+                constraintSet.constrainHeight(cell.id, width)
+                constraintSet.setMargin(cell.id, 1, if (x % 3 == 0) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
+                constraintSet.setMargin(cell.id, 2, if (x % 3 == 2) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
                 leftCell?.let {
                     // 2～9列目
                     constraintSet.connect(cell.id, ConstraintSet.LEFT, it.id, ConstraintSet.RIGHT)
@@ -47,6 +48,8 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 } ?: run {
                     // 1列目
                     constraintSet.connect(cell.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT )
+                    constraintSet.setMargin(cell.id, 3, if (y % 3 == 0) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
+                    constraintSet.setMargin(cell.id, 4, if (y % 3 == 2) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
                     topCell?.let {
                         constraintSet.connect(cell.id, ConstraintSet.TOP, it.id, ConstraintSet.BOTTOM)
                         if (y == MAX_ROWS - 1) {
@@ -66,25 +69,13 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                     leftCell = cell
                 }
             }
-            constraintSet.createHorizontalChain(
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.RIGHT,
-                ConstraintSet.PARENT_ID,
-                ConstraintSet.LEFT,
-                cells[y].mapNotNull { it?.id }.toIntArray(),
-                null,
-                ConstraintSet.CHAIN_PACKED
-            )
         }
-        constraintSet.createVerticalChain(
-            ConstraintSet.PARENT_ID,
-            ConstraintSet.TOP,
-            ConstraintSet.PARENT_ID,
-            ConstraintSet.BOTTOM,
-            cells.mapNotNull { it[0]?.id }.toIntArray(),
-            null,
-            ConstraintSet.CHAIN_PACKED
-        )
         constraintSet.applyTo(this)
+    }
+
+    companion object {
+        private const val MAX_ROWS: Int = 9
+        private const val BORDER_WIDTH_NORMAL: Int = 2
+        private const val BORDER_WIDTH_BOLD: Int = 10
     }
 }
