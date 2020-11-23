@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.su_box_cell.view.*
@@ -16,6 +17,9 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : RecyclerView(
         adapter = SUCustomAdapter(list)
         layoutManager = GridLayoutManager(context, 9, GridLayoutManager.VERTICAL, false)
         setHasFixedSize(true)
+
+        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL))
     }
 }
 
