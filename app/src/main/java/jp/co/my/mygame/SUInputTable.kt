@@ -30,7 +30,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         for (y in 0 until MAX_ROWS) { // 行
             var leftCell: SUBoxCell? = null // 左のセル
             for (x in 0 until MAX_ROWS) { // 列
-                val cell = SUBoxCell(context, x, y)
+                val cell = SUBoxCell(context)
                 cell.id = 100 + y * 10 + x
                 cells[y][x] = cell
                 addView(cell)
