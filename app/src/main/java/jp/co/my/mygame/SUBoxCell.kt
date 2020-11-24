@@ -8,6 +8,10 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 
+enum class SUStatus {
+    NORMAL, SAME, ERROR
+}
+
 class SUBoxCell
 @JvmOverloads
 constructor(
@@ -17,13 +21,20 @@ constructor(
     defStyleRes: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
+    var status = SUStatus.NORMAL
+
     init {
         LayoutInflater.from(context).inflate(R.layout.su_box_cell, this, true)
         updateState()
     }
 
-    private fun updateState() {
-        setBackgroundColor(Color.WHITE)
+    fun updateState(next: SUStatus? = null) {
+        next?.let { status = it }
+        when (status) {
+            SUStatus.NORMAL -> setBackgroundColor(Color.WHITE)
+            SUStatus.SAME -> setBackgroundColor(Color.YELLOW)
+            SUStatus.ERROR -> setBackgroundColor(Color.RED)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")

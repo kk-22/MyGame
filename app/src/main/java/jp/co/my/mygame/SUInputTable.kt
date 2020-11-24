@@ -7,7 +7,6 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import kotlinx.android.synthetic.main.su_box_cell.view.*
 
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
@@ -16,6 +15,16 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
 
     init {
         createCells()
+    }
+
+    fun updateAllStatus(status: SUStatus, action: (SUBoxCell) -> Boolean) {
+        cells.forEach { it ->
+            it.forEach { cell ->
+                if (action(cell!!)) {
+                    cell.updateState(status)
+                }
+            }
+        }
     }
 
     private fun createCells() {
