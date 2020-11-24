@@ -11,7 +11,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
-    val cells = Array(9) { arrayOfNulls<SUBoxCell>(9) } // [列][行]
+    var cells = emptyArray<SUBoxCell>()
 
     init {
         createCells()
@@ -19,10 +19,8 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
 
     fun updateAllStatus(status: SUStatus, action: (SUBoxCell) -> Boolean) {
         cells.forEach { it ->
-            it.forEach { cell ->
-                if (action(cell!!)) {
-                    cell.updateState(status)
-                }
+            if (action(it)) {
+                it.updateState(status)
             }
         }
     }
@@ -41,7 +39,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
             for (x in 0 until MAX_ROWS) { // 列
                 val cell = SUBoxCell(context)
                 cell.id = 100 + y * 10 + x
-                cells[y][x] = cell
+                cells += cell
                 addView(cell)
 
                 val width = metrics.widthPixels / (MAX_ROWS + 1)
