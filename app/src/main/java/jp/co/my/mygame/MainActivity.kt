@@ -16,9 +16,7 @@ class MainActivity : AppCompatActivity() {
 
         inputTable = findViewById(R.id.input_table)
         inputTable.cells.forEach {
-            it.forEach { cell ->
-                cell?.setOnClickListener(cellListener)
-            }
+            it.setOnClickListener(cellListener)
         }
         footerBar = findViewById(R.id.footer_bar)
         footerBar.numberButtons.forEach { it.setOnClickListener(footerListener) }
