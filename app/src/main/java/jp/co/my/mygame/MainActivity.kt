@@ -25,13 +25,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val cellListener = View.OnClickListener {
+        val cell = it as SUBoxCell
         val numbers = footerBar.selectingNumbers()
-        if (numbers.count() == 0) {
-            return@OnClickListener
-        } else if (numbers.count() == 1) {
-            it.center_number_text.text = numbers[0]
-        } else {
-            it.center_number_text.text = numbers.joinToString(separator = "")
+
+        when (numbers.count()) {
+            0 -> { return@OnClickListener }
+            1 -> { cell.center_number_text.text = numbers[0] }
+            else -> { cell.center_number_text.text = numbers.joinToString(separator = "") }
         }
     }
 
