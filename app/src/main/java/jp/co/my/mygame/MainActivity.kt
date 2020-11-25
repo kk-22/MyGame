@@ -3,28 +3,24 @@ package jp.co.my.mygame
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.su_box_cell.view.*
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var inputTable: SUInputTable
-    private lateinit var footerBar: SUFooterBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        inputTable = findViewById(R.id.input_table)
-        inputTable.boxCells.forEach {
+        input_table.boxCells.forEach {
             it.setOnClickListener(cellListener)
         }
-        footerBar = findViewById(R.id.footer_bar)
-        footerBar.numberButtons.forEach { it.setOnClickListener(footerListener) }
+        footer_bar.numberButtons.forEach { it.setOnClickListener(footerListener) }
     }
 
     private val cellListener = View.OnClickListener {
         val cell = it as SUBoxCell
-        val numbers = footerBar.selectingNumbers()
+        val numbers = footer_bar.selectingNumbers()
         val oldAnswer = cell.answer_text.text.toString()
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
@@ -47,22 +43,22 @@ class MainActivity : AppCompatActivity() {
         }
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
-            inputTable.validateCells(inputTable.filteredCells(answer))
+            input_table.validateCells(input_table.filteredCells(answer))
         }
     }
 
     private val footerListener = View.OnClickListener {
-        val selecting = footerBar.selectingNumbers()
+        val selecting = footer_bar.selectingNumbers()
         when (selecting.count()) {
             0, 2 -> {
                 // ハイライト解除
-                inputTable.updateAllStatus(SUStatus.NORMAL) { cell ->
+                input_table.updateAllStatus(SUStatus.NORMAL) { cell ->
                     cell.status == SUStatus.SAME
                 }
             }
             1 -> {
                 // 数字が同じCellをハイライト
-                inputTable.updateAllStatus(SUStatus.SAME) { cell ->
+                input_table.updateAllStatus(SUStatus.SAME) { cell ->
                     cell.answer_text.text == selecting[0]
                 }
             }
