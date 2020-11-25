@@ -23,15 +23,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val cellListener = View.OnClickListener {
-        val selectedCell = it as SUBoxCell
+        val cell = it as SUBoxCell
         val numbers = footerBar.selectingNumbers()
         when (numbers.count()) {
-            0 -> { selectedCell.center_number_text.text = "" }
+            0 -> {
+                cell.center_number_text.text = ""
+                cell.note_number_text.text = ""
+            }
             1 -> {
-                selectedCell.center_number_text.text = numbers[0]
+                cell.center_number_text.text = numbers[0]
+                cell.note_number_text.text = ""
                 inputTable.validateAllCell()
             }
-            else -> { selectedCell.center_number_text.text = numbers.joinToString(separator = "") }
+            else -> {
+                cell.center_number_text.text = ""
+                cell.note_number_text.text = numbers.joinToString(separator = "")
+            }
         }
     }
 
