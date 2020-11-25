@@ -18,10 +18,6 @@ class MainActivity : AppCompatActivity() {
             it.setOnClickListener(cellListener)
         }
         footer_bar.numberToggles.forEach { it.setOnClickListener(footerListener) }
-        footer_bar.note_toggle.setOnClickListener {
-            if (footer_bar.note_toggle.isChecked) { return@setOnClickListener }
-            footer_bar.disableToggles()  // オフにしたら全数字をオフ
-        }
     }
 
     private val cellListener = View.OnClickListener {
