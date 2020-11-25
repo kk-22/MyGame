@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         inputTable = findViewById(R.id.input_table)
-        inputTable.cells.forEach {
+        inputTable.boxCells.forEach {
             it.setOnClickListener(cellListener)
         }
         footerBar = findViewById(R.id.footer_bar)
