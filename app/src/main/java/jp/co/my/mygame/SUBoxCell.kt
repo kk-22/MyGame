@@ -18,7 +18,10 @@ constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0,
-    defStyleRes: Int = 0
+    defStyleRes: Int = 0,
+    val x: Int = 0,
+    val y: Int = 0,
+    val group: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     var status = SUStatus.NORMAL
