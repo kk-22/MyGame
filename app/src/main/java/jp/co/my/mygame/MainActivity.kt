@@ -31,16 +31,12 @@ class MainActivity : AppCompatActivity() {
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
-        when (numbers.count()) {
-            0 -> { /* Reset all text */ }
-            1 -> {
-                newAnswer = numbers[0]
-                if (oldAnswer == newAnswer) { return@OnClickListener }
-                changedAnswers.add(newAnswer)
-            }
-            else -> {
-                newNote = numbers.joinToString(separator = "")
-            }
+        if (numbers.count() == 1 && !footer_bar.note_toggle.isChecked) {
+            newAnswer = numbers[0]
+            if (oldAnswer == newAnswer) { return@OnClickListener }
+            changedAnswers.add(newAnswer)
+        } else {
+            newNote = numbers.joinToString(separator = "")
         }
         cell.answer_text.text = newAnswer
         cell.note_text.text = newNote
