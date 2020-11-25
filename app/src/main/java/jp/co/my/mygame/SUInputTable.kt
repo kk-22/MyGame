@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.su_box_cell.view.*
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
-    var cells = emptyArray<SUBoxCell>()
+    var boxCells = emptyArray<SUBoxCell>()
 
     companion object {
         private const val MAX_ROWS: Int = 9
@@ -25,7 +25,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun updateAllStatus(status: SUStatus, action: (SUBoxCell) -> Boolean) {
-        cells.forEach { it ->
+        boxCells.forEach { it ->
             if (action(it)) {
                 it.updateState(status)
             }
@@ -33,7 +33,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return cells.filter { it.center_number_text.text == answer }
+        return boxCells.filter { it.center_number_text.text == answer }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
@@ -49,9 +49,9 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         }
         // 検証
         listOf(groupList, xList, yList).forEach { list ->
-            list.forEach inner@{ subList ->
-                if (subList.count() <= 1) { return@inner }
-                subList.forEach { cell -> cell.updateState(SUStatus.ERROR) }
+            list.forEach inner@{ cells ->
+                if (cells.count() <= 1) { return@inner }
+                cells.forEach { cell -> cell.updateState(SUStatus.ERROR) }
             }
         }
     }
@@ -71,7 +71,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 val group = x / 3 + (y / 3 * 3)
                 val cell = SUBoxCell(context, x = x, y = y, group = group)
                 cell.id = 100 + y * 10 + x
-                cells += cell
+                boxCells += cell
                 addView(cell)
 
                 val width = metrics.widthPixels / (MAX_ROWS + 1)
