@@ -2,9 +2,11 @@ package jp.co.my.mygame
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.su_box_cell.view.*
+import kotlinx.android.synthetic.main.su_footer_bar.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,6 +18,10 @@ class MainActivity : AppCompatActivity() {
             it.setOnClickListener(cellListener)
         }
         footer_bar.numberButtons.forEach { it.setOnClickListener(footerListener) }
+        footer_bar.note_toggle.setOnClickListener {
+            if (footer_bar.note_toggle.isChecked) { return@setOnClickListener }
+            footer_bar.disableToggles()  // オフにしたら全数字をオフ
+        }
     }
 
     private val cellListener = View.OnClickListener {
@@ -48,6 +54,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val footerListener = View.OnClickListener {
+        val toggle = it as ToggleButton
+        if (!footer_bar.note_toggle.isChecked && toggle.isChecked) {
+            // 選択状態は1つのみにする
+            footer_bar.disableToggles(toggle)
+        }
         val selecting = footer_bar.selectingNumbers()
         when (selecting.count()) {
             0, 2 -> {

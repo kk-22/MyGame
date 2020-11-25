@@ -105,6 +105,16 @@
         app:layout_constraintStart_toEndOf="@+id/button8"
         app:layout_constraintTop_toTopOf="@id/button1" />
 
+    <ToggleButton
+        android:id="@+id/note_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOff="@string/NoteOff"
+        android:textOn="@string/NoteOn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button9"/>
+
     <Button
         android:id="@+id/clear_button"
         android:layout_width="wrap_content"

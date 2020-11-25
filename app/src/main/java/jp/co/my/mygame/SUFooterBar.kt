@@ -24,11 +24,18 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
         numberButtons = numberIds.map { findViewById<ToggleButton>(it) }
 
         findViewById<Button>(R.id.clear_button).setOnClickListener {
-            numberButtons.forEach { toggleButton -> toggleButton.isChecked = false }
+            disableToggles()
         }
     }
 
     fun selectingNumbers(): List<String> {
         return numberButtons.mapNotNull { if (it.isChecked) it.textOn as String else null }
+    }
+
+    fun disableToggles(ignoreToggle: ToggleButton? = null) {
+        numberButtons.forEach { toggle ->
+            if (toggle == ignoreToggle) { return@forEach }
+            toggle.isChecked = false
+        }
     }
 }

@@ -11,4 +11,6 @@
     <string name="number9">9</string>
     <string name="clear">Clear</string>
     <string name="dummy">dummy</string>
+    <string name="NoteOff">Note</string>
+    <string name="NoteOn">Note</string>
 </resources>
