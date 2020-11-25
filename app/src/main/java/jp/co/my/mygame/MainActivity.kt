@@ -25,20 +25,29 @@ class MainActivity : AppCompatActivity() {
     private val cellListener = View.OnClickListener {
         val cell = it as SUBoxCell
         val numbers = footerBar.selectingNumbers()
+        val oldAnswer = cell.center_number_text.text.toString()
+        val changedAnswers = mutableListOf(oldAnswer)
+        var newAnswer = ""
+        var newNote = ""
         when (numbers.count()) {
-            0 -> {
-                cell.center_number_text.text = ""
-                cell.note_number_text.text = ""
-            }
+            0 -> { /* Reset all text */ }
             1 -> {
-                cell.center_number_text.text = numbers[0]
-                cell.note_number_text.text = ""
-                inputTable.validateAllCell()
+                newAnswer = numbers[0]
+                if (oldAnswer == newAnswer) { return@OnClickListener }
+                changedAnswers.add(newAnswer)
             }
             else -> {
-                cell.center_number_text.text = ""
-                cell.note_number_text.text = numbers.joinToString(separator = "")
+                newNote = numbers.joinToString(separator = "")
             }
+        }
+        cell.center_number_text.text = newAnswer
+        cell.note_number_text.text = newNote
+        if (newAnswer == "") {
+            cell.updateState(SUStatus.NORMAL) // numbersが1以外ならvalidateCellsの対象外なのでここでリセット
+        }
+        changedAnswers.forEach { answer ->
+            if (answer == "") { return@forEach }
+            inputTable.validateCells(inputTable.filteredCells(answer))
         }
     }
 

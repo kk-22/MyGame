@@ -32,7 +32,10 @@ constructor(
     }
 
     fun updateState(next: SUStatus? = null) {
-        next?.let { status = it }
+        next?.let {
+            if (status == it) { return }
+            status = it
+        }
         when (status) {
             SUStatus.NORMAL -> setBackgroundColor(Color.WHITE)
             SUStatus.SAME -> setBackgroundColor(Color.YELLOW)
