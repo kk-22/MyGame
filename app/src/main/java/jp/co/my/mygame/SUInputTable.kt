@@ -33,7 +33,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return boxCells.filter { it.center_number_text.text == answer }
+        return boxCells.filter { it.answer_text.text == answer }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
