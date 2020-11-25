@@ -26,30 +26,26 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         }
     }
 
-    fun validateAllCell() {
-        // 数字毎にCellを集計
-        val numberCells = Array(10) { mutableListOf<SUBoxCell>() }
-        cells.forEach { cell ->
-            val text = cell.center_number_text.text.toString()
-            if (text == "") return@forEach // 未入力と2桁は除外
-            numberCells[Integer.valueOf(text)].add(cell)
-        }
+    fun filteredCells(answer: String): List<SUBoxCell> {
+        return cells.filter { it.center_number_text.text == answer }
+    }
 
-        // 縦・横・グループの検証
-        numberCells.forEach { cells ->
-            val groupList =  Array(10) { mutableListOf<SUBoxCell>() }
-            val xList =  Array(10) { mutableListOf<SUBoxCell>() }
-            val yList =  Array(10) { mutableListOf<SUBoxCell>() }
-            cells.forEach { cell ->
-                groupList[cell.group].add(cell)
-                xList[cell.x].add(cell)
-                yList[cell.y].add(cell)
-            }
-            listOf(groupList, xList, yList).forEach { list ->
-                list.forEach outer@{ subList ->
-                    if (subList.count() <= 1) { return@outer }
-                    subList.forEach { cell -> cell.updateState(SUStatus.ERROR) }
-                }
+    fun validateCells(cells: List<SUBoxCell>) {
+        // 縦・横・グループ毎に分別
+        val groupList = Array(10) { mutableListOf<SUBoxCell>() }
+        val xList = Array(10) { mutableListOf<SUBoxCell>() }
+        val yList = Array(10) { mutableListOf<SUBoxCell>() }
+        cells.forEach { cell ->
+            groupList[cell.group].add(cell)
+            xList[cell.x].add(cell)
+            yList[cell.y].add(cell)
+            cell.updateState(SUStatus.NORMAL) // リセット
+        }
+        // 検証
+        listOf(groupList, xList, yList).forEach { list ->
+            list.forEach inner@{ subList ->
+                if (subList.count() <= 1) { return@inner }
+                subList.forEach { cell -> cell.updateState(SUStatus.ERROR) }
             }
         }
     }
