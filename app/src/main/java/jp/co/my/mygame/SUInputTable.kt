@@ -7,6 +7,7 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import kotlinx.android.synthetic.main.su_box_cell.view.*
 
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
@@ -25,6 +26,34 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         }
     }
 
+    fun validateAllCell() {
+        // 数字毎にCellを集計
+        val numberCells = Array(10) { mutableListOf<SUBoxCell>() }
+        cells.forEach { cell ->
+            val text = cell.center_number_text.text.toString()
+            if (text == "") return@forEach // 未入力と2桁は除外
+            numberCells[Integer.valueOf(text)].add(cell)
+        }
+
+        // 縦・横・グループの検証
+        numberCells.forEach { cells ->
+            val groupList =  Array(10) { mutableListOf<SUBoxCell>() }
+            val xList =  Array(10) { mutableListOf<SUBoxCell>() }
+            val yList =  Array(10) { mutableListOf<SUBoxCell>() }
+            cells.forEach { cell ->
+                groupList[cell.group].add(cell)
+                xList[cell.x].add(cell)
+                yList[cell.y].add(cell)
+            }
+            listOf(groupList, xList, yList).forEach { list ->
+                list.forEach outer@{ subList ->
+                    if (subList.count() <= 1) { return@outer }
+                    subList.forEach { cell -> cell.updateState(SUStatus.ERROR) }
+                }
+            }
+        }
+    }
+
     private fun createCells() {
         // 画面サイズ
         val metrics = DisplayMetrics()
@@ -37,7 +66,8 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         for (y in 0 until MAX_ROWS) { // 行
             var leftCell: SUBoxCell? = null // 左のセル
             for (x in 0 until MAX_ROWS) { // 列
-                val cell = SUBoxCell(context)
+                val group = x / 3 + (y / 3 * 3)
+                val cell = SUBoxCell(context, x = x, y = y, group = group)
                 cell.id = 100 + y * 10 + x
                 cells += cell
                 addView(cell)
