@@ -12,23 +12,23 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
     attributeSet
 ) {
 
-    val numberButtons: List<ToggleButton>
+    val numberToggles: List<ToggleButton>
     init {
         View.inflate(context, R.layout.su_footer_bar, this)
 
         val numberIds = arrayOf(
-            R.id.button1, R.id.button2, R.id.button3, R.id.button4,
-            R.id.button5, R.id.button6, R.id.button7, R.id.button8, R.id.button9
+            R.id.number1_toggle, R.id.number2_toggle, R.id.number3_toggle, R.id.number4_toggle,
+            R.id.number5_toggle, R.id.number6_toggle, R.id.number7_toggle, R.id.number8_toggle, R.id.number9_toggle
         )
-        numberButtons = numberIds.map { findViewById<ToggleButton>(it) }
+        numberToggles = numberIds.map { findViewById<ToggleButton>(it) }
     }
 
     fun selectingNumbers(): List<String> {
-        return numberButtons.mapNotNull { if (it.isChecked) it.textOn as String else null }
+        return numberToggles.mapNotNull { if (it.isChecked) it.textOn as String else null }
     }
 
     fun disableToggles(ignoreToggle: ToggleButton? = null) {
-        numberButtons.forEach { toggle ->
+        numberToggles.forEach { toggle ->
             if (toggle == ignoreToggle) { return@forEach }
             toggle.isChecked = false
         }

@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         input_table.boxCells.forEach {
             it.setOnClickListener(cellListener)
         }
-        footer_bar.numberButtons.forEach { it.setOnClickListener(footerListener) }
+        footer_bar.numberToggles.forEach { it.setOnClickListener(footerListener) }
         footer_bar.note_toggle.setOnClickListener {
             if (footer_bar.note_toggle.isChecked) { return@setOnClickListener }
             footer_bar.disableToggles()  // オフにしたら全数字をオフ
