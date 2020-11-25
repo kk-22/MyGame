@@ -8,7 +8,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/center_number_text"
+        android:id="@+id/answer_text"
         android:layout_margin="1dp"
         android:gravity="center"
         android:textStyle="bold"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/note_number_text"
+        android:id="@+id/note_text"
         android:textStyle="bold"
         android:textSize="15sp"
         android:layout_width="match_parent"

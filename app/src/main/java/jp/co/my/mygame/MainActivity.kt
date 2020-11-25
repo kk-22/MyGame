@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val cellListener = View.OnClickListener {
         val cell = it as SUBoxCell
         val numbers = footerBar.selectingNumbers()
-        val oldAnswer = cell.center_number_text.text.toString()
+        val oldAnswer = cell.answer_text.text.toString()
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
@@ -40,8 +40,8 @@ class MainActivity : AppCompatActivity() {
                 newNote = numbers.joinToString(separator = "")
             }
         }
-        cell.center_number_text.text = newAnswer
-        cell.note_number_text.text = newNote
+        cell.answer_text.text = newAnswer
+        cell.note_text.text = newNote
         if (newAnswer == "") {
             cell.updateState(SUStatus.NORMAL) // numbersが1以外ならvalidateCellsの対象外なのでここでリセット
         }
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             1 -> {
                 // 数字が同じCellをハイライト
                 inputTable.updateAllStatus(SUStatus.SAME) { cell ->
-                    cell.center_number_text.text == selecting[0]
+                    cell.answer_text.text == selecting[0]
                 }
             }
         }
