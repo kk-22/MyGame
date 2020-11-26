@@ -11,7 +11,7 @@ import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import org.json.JSONArray
 
 
-class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
+class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
 
     var boxCells = emptyArray<SUBoxCell>()
 
