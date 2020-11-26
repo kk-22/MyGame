@@ -21,15 +21,12 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
             R.id.number5_toggle, R.id.number6_toggle, R.id.number7_toggle, R.id.number8_toggle, R.id.number9_toggle
         )
         numberToggles = numberIds.map { findViewById<ToggleButton>(it) }
-
-        binding.noteToggle.setOnClickListener {
-            if (binding.noteToggle.isChecked || selectingNumbers().count() <= 1) { return@setOnClickListener }
-            deselectToggles()  // 2つ以上選択中にオフにしたら全数字をオフ
-        }
     }
 
-    fun selectingNumbers(): List<String> {
-        return numberToggles.mapNotNull { if (it.isChecked) it.textOn as String else null }
+    fun selectedNumber(): String? {
+        return numberToggles.firstOrNull { it.isChecked }?.textOn?.toString() ?: run {
+            null
+        }
     }
 
     fun deselectToggles(ignoreToggle: ToggleButton? = null) {
