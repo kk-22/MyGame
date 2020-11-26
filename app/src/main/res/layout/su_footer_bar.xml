@@ -7,20 +7,21 @@
 
     <ToggleButton
         android:id="@+id/number1_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number1"
         android:textOn="@string/number1"
+        app:layout_constraintBottom_toTopOf="@id/number4_toggle"
         app:layout_constraintEnd_toStartOf="@id/number2_toggle"
-        app:layout_constraintVertical_chainStyle="spread"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <ToggleButton
         android:id="@+id/number2_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number2"
         android:textOn="@string/number2"
         app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
@@ -30,89 +31,90 @@
 
     <ToggleButton
         android:id="@+id/number3_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number3"
         android:textOn="@string/number3"
         app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number4_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/number2_toggle"
         app:layout_constraintTop_toTopOf="@id/number1_toggle" />
 
     <ToggleButton
         android:id="@+id/number4_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number4"
         android:textOn="@string/number4"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number5_toggle"
-        app:layout_constraintStart_toEndOf="@+id/number3_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toTopOf="@+id/number7_toggle"
+        app:layout_constraintEnd_toEndOf="@id/number1_toggle"
+        app:layout_constraintStart_toStartOf="@id/number1_toggle"
+        app:layout_constraintTop_toBottomOf="@+id/number1_toggle" />
 
     <ToggleButton
         android:id="@+id/number5_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number5"
         android:textOn="@string/number5"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number6_toggle"
-        app:layout_constraintStart_toEndOf="@+id/number4_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toBottomOf="@+id/number4_toggle"
+        app:layout_constraintEnd_toEndOf="@id/number2_toggle"
+        app:layout_constraintStart_toStartOf="@+id/number2_toggle"
+        app:layout_constraintTop_toTopOf="@+id/number4_toggle" />
 
     <ToggleButton
         android:id="@+id/number6_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number6"
         android:textOn="@string/number6"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number7_toggle"
-        app:layout_constraintStart_toEndOf="@+id/number5_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toBottomOf="@+id/number4_toggle"
+        app:layout_constraintEnd_toEndOf="@id/number3_toggle"
+        app:layout_constraintStart_toStartOf="@+id/number3_toggle"
+        app:layout_constraintTop_toTopOf="@+id/number4_toggle"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ToggleButton
         android:id="@+id/number7_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number7"
         android:textOn="@string/number7"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number8_toggle"
-        app:layout_constraintStart_toEndOf="@+id/number6_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/number4_toggle"
+        app:layout_constraintStart_toStartOf="@+id/number4_toggle"
+        app:layout_constraintTop_toBottomOf="@id/number4_toggle" />
 
     <ToggleButton
         android:id="@+id/number8_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number8"
         android:textOn="@string/number8"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toStartOf="@id/number9_toggle"
-        app:layout_constraintStart_toEndOf="@+id/number7_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toBottomOf="@+id/number7_toggle"
+        app:layout_constraintEnd_toEndOf="@id/number5_toggle"
+        app:layout_constraintStart_toStartOf="@+id/number5_toggle"
+        app:layout_constraintTop_toTopOf="@+id/number7_toggle" />
 
     <ToggleButton
         android:id="@+id/number9_toggle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:textOff="@string/number9"
         android:textOn="@string/number9"
-        app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/number8_toggle"
-        app:layout_constraintTop_toTopOf="@id/number1_toggle" />
+        app:layout_constraintBottom_toBottomOf="@+id/number7_toggle"
+        app:layout_constraintEnd_toEndOf="@id/number6_toggle"
+        app:layout_constraintStart_toStartOf="@+id/number6_toggle"
+        app:layout_constraintTop_toTopOf="@+id/number7_toggle" />
 
     <ToggleButton
         android:id="@+id/note_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
         android:textOff="@string/NoteOff"
         android:textOn="@string/NoteOn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/number9_toggle"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
