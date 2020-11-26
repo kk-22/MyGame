@@ -45,8 +45,8 @@ constructor(
         }
     }
 
-    fun highlightIfNeeded(highlightAnswer: String?) {
-        if (status == SUStatus.ERROR) return
+    fun highlightIfNeeded(highlightAnswer: String?, skipIfError: Boolean = true) {
+        if (status == SUStatus.ERROR && skipIfError) return
         if (highlightAnswer != null
             && (binding.answerText.text == highlightAnswer || noteNumbers.contains(highlightAnswer))) {
             updateState(SUStatus.HIGHLIGHT)

@@ -51,6 +51,10 @@ class MainActivity : AppCompatActivity() {
         var newNote = ""
         selectedNumber?.also { number ->
             when {
+                oldAnswer == number -> {
+                    // 前の操作時に誤って入力した数字を削除する
+                    newAnswer = ""
+                }
                 oldAnswer != "" -> {
                     // 誤った上書きを阻止
                     return@OnClickListener
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             cell.toggleNote(newNote)
         }
         // Stateの更新
-        cell.highlightIfNeeded(selectedNumber)
+        cell.highlightIfNeeded(selectedNumber, false)
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
             val cells = binding.inputTable.filteredCells(answer)
