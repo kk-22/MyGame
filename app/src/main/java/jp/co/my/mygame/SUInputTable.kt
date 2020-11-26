@@ -73,6 +73,15 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         }
     }
 
+    fun clearCells() {
+        // 誤って削除時に復旧できるようにpreferenceは消去しない
+        boxCells.forEach { cell ->
+            cell.answer_text.text = ""
+            cell.note_text.text = ""
+            cell.updateState(SUStatus.NORMAL)
+        }
+    }
+
     fun saveToPref() {
         //val texts: List<String> = boxCells.map { "$it.answer_text.text),$it.note_text.text" }
         val texts: List<String> = boxCells.map { it.answer_text.text.toString() + "," + it.note_text.text.toString() }

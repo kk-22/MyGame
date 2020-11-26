@@ -13,4 +13,5 @@
     <string name="dummy">dummy</string>
     <string name="NoteOff">Note</string>
     <string name="NoteOn">Note</string>
+    <string name="all_clear">消去</string>
 </resources>

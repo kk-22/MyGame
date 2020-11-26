@@ -1,6 +1,8 @@
 package jp.co.my.mygame
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +23,22 @@ class MainActivity : AppCompatActivity() {
             input_table.validateAllCell()
         }
         footer_bar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.su_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.clear -> {
+                input_table.clearCells()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private val cellClickListener = View.OnClickListener {
