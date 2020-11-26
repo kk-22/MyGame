@@ -74,7 +74,16 @@ class MainActivity : AppCompatActivity() {
         }
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
-            input_table.validateCells(input_table.filteredCells(answer))
+            val cells = input_table.filteredCells(answer)
+            input_table.validateCells(cells)
+
+            when {
+                cells.count() == SUInputTable.MAX_ROWS ->
+                    // 9セル分の入力が完了した数字は無効化する
+                    footer_bar.enableToggle(false, answer)
+                cells.count() == SUInputTable.MAX_ROWS - 1 && oldAnswer == answer ->
+                    footer_bar.enableToggle(true, answer)
+            }
         }
         input_table.saveToPref()
     }
@@ -83,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         val toggle = it as ToggleButton
         if (!footer_bar.note_toggle.isChecked && toggle.isChecked) {
             // 選択状態は1つのみにする
-            footer_bar.disableToggles(toggle)
+            footer_bar.deselectToggles(toggle)
         }
         val selecting = footer_bar.selectingNumbers()
         when (selecting.count()) {
