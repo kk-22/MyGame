@@ -15,12 +15,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         input_table.boxCells.forEach {
-            it.setOnClickListener(cellListener)
+            it.setOnClickListener(cellClickListener)
         }
-        footer_bar.numberToggles.forEach { it.setOnClickListener(footerListener) }
+        footer_bar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
 
-    private val cellListener = View.OnClickListener {
+    private val cellClickListener = View.OnClickListener {
         val cell = it as SUBoxCell
         val numbers = footer_bar.selectingNumbers()
         val oldAnswer = cell.answer_text.text.toString()
@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val footerListener = View.OnClickListener {
+    private val numberClickListener = View.OnClickListener {
         val toggle = it as ToggleButton
         if (!footer_bar.note_toggle.isChecked && toggle.isChecked) {
             // 選択状態は1つのみにする
