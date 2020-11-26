@@ -9,7 +9,7 @@ import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
 
 enum class SUStatus {
-    NORMAL, SAME, ERROR
+    NORMAL, HIGHLIGHT, ERROR
 }
 
 class SUBoxCell
@@ -38,7 +38,7 @@ constructor(
         }
         when (status) {
             SUStatus.NORMAL -> setBackgroundColor(Color.WHITE)
-            SUStatus.SAME -> setBackgroundColor(Color.YELLOW)
+            SUStatus.HIGHLIGHT -> setBackgroundColor(Color.YELLOW)
             SUStatus.ERROR -> setBackgroundColor(Color.RED)
         }
     }

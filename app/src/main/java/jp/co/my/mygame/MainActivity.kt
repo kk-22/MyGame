@@ -56,12 +56,12 @@ class MainActivity : AppCompatActivity() {
             0, 2 -> {
                 // ハイライト解除
                 input_table.updateAllStatus(SUStatus.NORMAL) { cell ->
-                    cell.status == SUStatus.SAME
+                    cell.status == SUStatus.HIGHLIGHT
                 }
             }
             1 -> {
                 // 数字が同じCellをハイライト
-                input_table.updateAllStatus(SUStatus.SAME) { cell ->
+                input_table.updateAllStatus(SUStatus.HIGHLIGHT) { cell ->
                     cell.answer_text.text == selecting[0]
                 }
             }
