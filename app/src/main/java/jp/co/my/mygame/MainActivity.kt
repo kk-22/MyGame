@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
-        binding.footerBar.selectedNumber()?.let { number ->
+        binding.footerBar.selectedNumber()?.also { number ->
             when {
                 oldAnswer != "" -> {
                     // 誤った上書きを阻止

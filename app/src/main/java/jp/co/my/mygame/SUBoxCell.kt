@@ -34,7 +34,7 @@ constructor(
     }
 
     fun updateState(next: SUStatus? = null) {
-        next?.let {
+        next?.also {
             if (status == it) { return }
             status = it
         }
@@ -57,7 +57,7 @@ constructor(
 
     fun resetNote(newNumbers: List<String>?) {
         noteNumbers.clear()
-        newNumbers?.let {
+        newNumbers?.also {
             noteNumbers.addAll(it)
         }
         updateNoteText()
