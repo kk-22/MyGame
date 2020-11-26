@@ -26,6 +26,7 @@ constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     val binding = SuBoxCellBinding.inflate(LayoutInflater.from(context), this)
+    val noteNumbers = mutableListOf<String>()
     var status = SUStatus.NORMAL
 
     init {
@@ -42,6 +43,28 @@ constructor(
             SUStatus.HIGHLIGHT -> setBackgroundColor(Color.YELLOW)
             SUStatus.ERROR -> setBackgroundColor(Color.RED)
         }
+    }
+
+    fun toggleNote(number: String) {
+        if (noteNumbers.contains(number)) {
+            noteNumbers.remove(number)
+        } else {
+            noteNumbers.add(number)
+            noteNumbers.sort()
+        }
+        updateNoteText()
+    }
+
+    fun resetNote(newNumbers: List<String>?) {
+        noteNumbers.clear()
+        newNumbers?.let {
+            noteNumbers.addAll(it)
+        }
+        updateNoteText()
+    }
+
+    private fun updateNoteText() {
+        binding.noteText.text = noteNumbers.joinToString(separator = "")
     }
 
     @SuppressLint("ClickableViewAccessibility")

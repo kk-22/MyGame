@@ -44,40 +44,43 @@ class MainActivity : AppCompatActivity() {
 
     private val cellClickListener = View.OnClickListener {
         val cell = it as SUBoxCell
-        val numbers = binding.footerBar.selectingNumbers()
         val oldAnswer = cell.binding.answerText.text.toString()
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
-        when {
-            numbers.count() == 0 -> {
-                newNote = oldAnswer // 誤って上書きした時用のバックアップ
+        binding.footerBar.selectedNumber()?.let { number ->
+            when {
+                oldAnswer != "" -> {
+                    // 誤った上書きを阻止
+                    return@OnClickListener
+                }
+                binding.footerBar.binding.noteToggle.isChecked -> {
+                    newNote = number
+                }
+                else -> {
+                    newAnswer = number
+                }
             }
-            oldAnswer != "" -> {
-                // 誤った上書きを阻止
-                return@OnClickListener
-            }
-            binding.footerBar.binding.noteToggle.isChecked -> {
-                newNote = numbers.joinToString(separator = "")
-            }
-            else -> {
-                newAnswer = numbers[0]
-                changedAnswers.add(newAnswer)
-            }
+            changedAnswers.add(number)
+            cell.updateState(SUStatus.HIGHLIGHT) // 数値を変更＝数字選択中なので入力したセルをハイライトする
+        } ?: run {
+            newNote = oldAnswer // 誤って上書きした時用のバックアップ
+            cell.updateState(SUStatus.NORMAL) // Answerを入力しない場合validateCellsの対象外なのでここでリセット
         }
 
+        // 数字の更新
         cell.binding.answerText.text = newAnswer
-        cell.binding.noteText.text = newNote
-        if (newAnswer == "") {
-            cell.updateState(SUStatus.NORMAL) // numbersが1以外ならvalidateCellsの対象外なのでここでリセット
+        if (newNote == "") {
+            cell.resetNote(null)
         } else {
-            cell.updateState(SUStatus.HIGHLIGHT) // 数値を変更＝数字選択中なので入力したセルをハイライトする
+            cell.toggleNote(newNote)
         }
+        // Stateの更新
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
             val cells = binding.inputTable.filteredCells(answer)
             binding.inputTable.validateCells(cells)
-
+            // フッターの更新
             when {
                 cells.count() == SUInputTable.MAX_ROWS ->
                     // 9セル分の入力が完了した数字は無効化する
@@ -91,24 +94,12 @@ class MainActivity : AppCompatActivity() {
 
     private val numberClickListener = View.OnClickListener {
         val toggle = it as ToggleButton
-        if (!binding.footerBar.binding.noteToggle.isChecked && toggle.isChecked) {
+        var selectingNumber: String? = null
+        if (toggle.isChecked) {
             // 選択状態は1つのみにする
             binding.footerBar.deselectToggles(toggle)
+            selectingNumber = toggle.textOn.toString()
         }
-        val selecting = binding.footerBar.selectingNumbers()
-        when (selecting.count()) {
-            0, 2 -> {
-                // ハイライト解除
-                binding.inputTable.highlightCell(null)
-            }
-            1 -> {
-                // ハイライトする
-                binding.inputTable.highlightCell(selecting[0])
-            }
-            else -> {
-                // 2時点でハイライト解除済みなので更新なし
-                return@OnClickListener
-            }
-        }
+        binding.inputTable.highlightCell(selectingNumber)
     }
 }

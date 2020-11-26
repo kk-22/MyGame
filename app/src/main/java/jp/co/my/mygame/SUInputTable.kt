@@ -62,11 +62,10 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun highlightCell(highlightAnswer: String?) {
-        val regex = highlightAnswer?.let { Regex(it) }
         boxCells.forEach { cell ->
             if (cell.status == SUStatus.ERROR) return@forEach
             if (highlightAnswer != null
-                && (cell.binding.answerText.text == highlightAnswer || regex!!.containsMatchIn(cell.binding.noteText.text))) {
+                && (cell.binding.answerText.text == highlightAnswer || cell.noteNumbers.contains(highlightAnswer))) {
                 cell.updateState(SUStatus.HIGHLIGHT)
             } else {
                 cell.updateState(SUStatus.NORMAL)
@@ -84,7 +83,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun saveToPref() {
-        val texts: List<String> = boxCells.map { it.binding.answerText.text.toString() + "," + it.binding.noteText.text.toString() }
+        val texts: List<String> = boxCells.map { it.binding.answerText.text.toString() + "," + it.noteNumbers.joinToString(separator = "") }
         val jsonArray = JSONArray(texts)
         val pref = getDefaultSharedPreferences(context)
         pref.edit().putString("SUCellTexts", jsonArray.toString()).apply()
@@ -98,7 +97,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         for (i in 0 until jsonArray.length()) {
             val texts = jsonArray.getString(i).split(",")
             boxCells[i].binding.answerText.text = texts[0]
-            boxCells[i].binding.noteText.text = texts[1]
+            boxCells[i].resetNote(texts[1].split("").filter { it != "" })
         }
         return true
     }
