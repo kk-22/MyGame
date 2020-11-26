@@ -17,11 +17,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.inputTable.boxCells.forEach {
+        binding.boxTable.boxCells.forEach {
             it.setOnClickListener(cellClickListener)
         }
-        if (binding.inputTable.loadFromPref()) {
-            binding.inputTable.validateAllCell()
+        if (binding.boxTable.loadFromPref()) {
+            binding.boxTable.validateAllCell()
         }
         binding.footerBar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear -> {
-                binding.inputTable.clearCells()
+                binding.boxTable.clearCells()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -82,18 +82,18 @@ class MainActivity : AppCompatActivity() {
         cell.highlightIfNeeded(selectedNumber, false)
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
-            val cells = binding.inputTable.filteredCells(answer)
-            binding.inputTable.validateCells(cells)
+            val cells = binding.boxTable.filteredCells(answer)
+            binding.boxTable.validateCells(cells)
             // フッターの更新
             when {
-                cells.count() == SUInputTable.MAX_ROWS ->
+                cells.count() == SUBoxTable.MAX_ROWS ->
                     // 9セル分の入力が完了した数字は無効化する
                     binding.footerBar.enableToggle(false, answer)
-                cells.count() == SUInputTable.MAX_ROWS - 1 && oldAnswer == answer ->
+                cells.count() == SUBoxTable.MAX_ROWS - 1 && oldAnswer == answer ->
                     binding.footerBar.enableToggle(true, answer)
             }
         }
-        binding.inputTable.saveToPref()
+        binding.boxTable.saveToPref()
     }
 
     private val numberClickListener = View.OnClickListener {
@@ -104,6 +104,6 @@ class MainActivity : AppCompatActivity() {
             binding.footerBar.deselectToggles(toggle)
             selectingNumber = toggle.textOn.toString()
         }
-        binding.inputTable.highlightCell(selectingNumber)
+        binding.boxTable.highlightCell(selectingNumber)
     }
 }
