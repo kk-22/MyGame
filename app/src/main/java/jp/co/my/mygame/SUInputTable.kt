@@ -7,7 +7,9 @@ import android.util.DisplayMetrics
 import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.preference.PreferenceManager.getDefaultSharedPreferences
 import kotlinx.android.synthetic.main.su_box_cell.view.*
+import org.json.JSONArray
 
 
 class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLayout(context, attributeSet) {
@@ -50,6 +52,16 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         }
     }
 
+    fun validateAllCell() {
+        val answerList = Array(10) { mutableListOf<SUBoxCell>() }
+        boxCells.forEach { cell ->
+            val answer = cell.answer_text.text
+            if (answer == "") return@forEach
+            answerList[Integer.valueOf(answer.toString())].add(cell)
+        }
+        answerList.forEach { validateCells(it) }
+    }
+
     fun highlightCell(highlightAnswer: String?) {
         boxCells.forEach { cell ->
             if (cell.status == SUStatus.ERROR) return@forEach
@@ -59,6 +71,27 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 cell.updateState(SUStatus.NORMAL)
             }
         }
+    }
+
+    fun saveToPref() {
+        //val texts: List<String> = boxCells.map { "$it.answer_text.text),$it.note_text.text" }
+        val texts: List<String> = boxCells.map { it.answer_text.text.toString() + "," + it.note_text.text.toString() }
+        val jsonArray = JSONArray(texts)
+        val pref = getDefaultSharedPreferences(context)
+        pref.edit().putString("SUBoxCells", jsonArray.toString()).apply()
+    }
+
+    fun loadFromPref(): Boolean {
+        val pref = getDefaultSharedPreferences(context)
+        val json = pref.getString("SUBoxCells", "")
+        if (json == "") return false
+        val jsonArray = JSONArray(json)
+        for (i in 0 until jsonArray.length()) {
+            val texts = jsonArray.getString(i).split(",")
+            boxCells[i].answer_text.text = texts[0]
+            boxCells[i].note_text.text = texts[1]
+        }
+        return true
     }
 
     private fun createCells() {
