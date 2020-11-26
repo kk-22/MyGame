@@ -63,9 +63,11 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun highlightCell(highlightAnswer: String?) {
+        val regex = highlightAnswer?.let { Regex(it) }
         boxCells.forEach { cell ->
             if (cell.status == SUStatus.ERROR) return@forEach
-            if (cell.answer_text.text == highlightAnswer) {
+            if (highlightAnswer != null
+                && (cell.answer_text.text == highlightAnswer || regex!!.containsMatchIn(cell.note_text.text))) {
                 cell.updateState(SUStatus.HIGHLIGHT)
             } else {
                 cell.updateState(SUStatus.NORMAL)
