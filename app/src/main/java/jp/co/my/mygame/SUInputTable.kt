@@ -83,16 +83,15 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun saveToPref() {
-        //val texts: List<String> = boxCells.map { "$it.answer_text.text),$it.note_text.text" }
         val texts: List<String> = boxCells.map { it.answer_text.text.toString() + "," + it.note_text.text.toString() }
         val jsonArray = JSONArray(texts)
         val pref = getDefaultSharedPreferences(context)
-        pref.edit().putString("SUBoxCells", jsonArray.toString()).apply()
+        pref.edit().putString("SUCellTexts", jsonArray.toString()).apply()
     }
 
     fun loadFromPref(): Boolean {
         val pref = getDefaultSharedPreferences(context)
-        val json = pref.getString("SUBoxCells", "")
+        val json = pref.getString("SUCellTexts", "")
         if (json == "") return false
         val jsonArray = JSONArray(json)
         for (i in 0 until jsonArray.length()) {
