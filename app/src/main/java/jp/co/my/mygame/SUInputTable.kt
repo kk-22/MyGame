@@ -24,14 +24,6 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         createCells()
     }
 
-    fun updateAllStatus(status: SUStatus, action: (SUBoxCell) -> Boolean) {
-        boxCells.forEach { it ->
-            if (action(it)) {
-                it.updateState(status)
-            }
-        }
-    }
-
     fun filteredCells(answer: String): List<SUBoxCell> {
         return boxCells.filter { it.answer_text.text == answer }
     }
@@ -45,13 +37,26 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
             groupList[cell.group].add(cell)
             xList[cell.x].add(cell)
             yList[cell.y].add(cell)
-            cell.updateState(SUStatus.NORMAL) // リセット
+            if (cell.status == SUStatus.ERROR) {
+                cell.updateState(SUStatus.NORMAL) // エラーでは無くなった可能性があるためリセット
+            }
         }
         // 検証
         listOf(groupList, xList, yList).forEach { list ->
             list.forEach inner@{ cells ->
                 if (cells.count() <= 1) { return@inner }
                 cells.forEach { cell -> cell.updateState(SUStatus.ERROR) }
+            }
+        }
+    }
+
+    fun highlightCell(highlightAnswer: String?) {
+        boxCells.forEach { cell ->
+            if (cell.status == SUStatus.ERROR) return@forEach
+            if (cell.answer_text.text == highlightAnswer) {
+                cell.updateState(SUStatus.HIGHLIGHT)
+            } else {
+                cell.updateState(SUStatus.NORMAL)
             }
         }
     }

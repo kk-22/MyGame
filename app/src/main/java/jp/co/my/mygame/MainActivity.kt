@@ -38,6 +38,8 @@ class MainActivity : AppCompatActivity() {
         cell.note_text.text = newNote
         if (newAnswer == "") {
             cell.updateState(SUStatus.NORMAL) // numbersが1以外ならvalidateCellsの対象外なのでここでリセット
+        } else {
+            cell.updateState(SUStatus.HIGHLIGHT) // 数値を変更＝数字選択中なので入力したセルをハイライトする
         }
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
@@ -55,15 +57,15 @@ class MainActivity : AppCompatActivity() {
         when (selecting.count()) {
             0, 2 -> {
                 // ハイライト解除
-                input_table.updateAllStatus(SUStatus.NORMAL) { cell ->
-                    cell.status == SUStatus.HIGHLIGHT
-                }
+                input_table.highlightCell(null)
             }
             1 -> {
-                // 数字が同じCellをハイライト
-                input_table.updateAllStatus(SUStatus.HIGHLIGHT) { cell ->
-                    cell.answer_text.text == selecting[0]
-                }
+                // ハイライトする
+                input_table.highlightCell(selecting[0])
+            }
+            else -> {
+                // 2時点でハイライト解除済みなので更新なし
+                return@OnClickListener
             }
         }
     }
