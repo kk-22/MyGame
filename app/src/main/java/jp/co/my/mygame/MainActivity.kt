@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity() {
         input_table.boxCells.forEach {
             it.setOnClickListener(cellClickListener)
         }
+        if (input_table.loadFromPref()) {
+            input_table.validateAllCell()
+        }
         footer_bar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
 
@@ -45,6 +48,7 @@ class MainActivity : AppCompatActivity() {
             if (answer == "") { return@forEach }
             input_table.validateCells(input_table.filteredCells(answer))
         }
+        input_table.saveToPref()
     }
 
     private val numberClickListener = View.OnClickListener {
