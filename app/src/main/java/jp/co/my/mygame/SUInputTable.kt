@@ -125,7 +125,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                 constraintSet.constrainHeight(cell.id, width)
                 constraintSet.setMargin(cell.id, 1, if (x % 3 == 0) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
                 constraintSet.setMargin(cell.id, 2, if (x % 3 == 2) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
-                leftCell?.let {
+                leftCell?.also {
                     // 2～9列目
                     constraintSet.connect(cell.id, ConstraintSet.LEFT, it.id, ConstraintSet.RIGHT)
                     constraintSet.connect(cell.id, ConstraintSet.TOP, it.id, ConstraintSet.TOP)
@@ -134,7 +134,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
                     constraintSet.connect(cell.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT )
                     constraintSet.setMargin(cell.id, 3, if (y % 3 == 0) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
                     constraintSet.setMargin(cell.id, 4, if (y % 3 == 2) BORDER_WIDTH_BOLD else BORDER_WIDTH_NORMAL)
-                    topCell?.let {
+                    topCell?.also {
                         constraintSet.connect(cell.id, ConstraintSet.TOP, it.id, ConstraintSet.BOTTOM)
                         if (y == MAX_ROWS - 1) {
                             // 最終行
