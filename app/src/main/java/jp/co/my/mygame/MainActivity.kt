@@ -46,9 +46,10 @@ class MainActivity : AppCompatActivity() {
         val cell = it as SUBoxCell
         val oldAnswer = cell.binding.answerText.text.toString()
         val changedAnswers = mutableListOf(oldAnswer)
+        val selectedNumber = binding.footerBar.selectedNumber()
         var newAnswer = ""
         var newNote = ""
-        binding.footerBar.selectedNumber()?.also { number ->
+        selectedNumber?.also { number ->
             when {
                 oldAnswer != "" -> {
                     // 誤った上書きを阻止
@@ -62,10 +63,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             changedAnswers.add(number)
-            cell.updateState(SUStatus.HIGHLIGHT) // 数値を変更＝数字選択中なので入力したセルをハイライトする
         } ?: run {
             newNote = oldAnswer // 誤って上書きした時用のバックアップ
-            cell.updateState(SUStatus.NORMAL) // Answerを入力しない場合validateCellsの対象外なのでここでリセット
         }
 
         // 数字の更新
@@ -76,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             cell.toggleNote(newNote)
         }
         // Stateの更新
+        cell.highlightIfNeeded(selectedNumber)
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
             val cells = binding.inputTable.filteredCells(answer)
