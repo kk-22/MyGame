@@ -17,7 +17,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     var boxCells = emptyArray<SUBoxCell>()
 
     companion object {
-        private const val MAX_ROWS: Int = 9
+        const val MAX_ROWS: Int = 9
         private const val BORDER_WIDTH_NORMAL: Int = 2
         private const val BORDER_WIDTH_BOLD: Int = 10
     }
