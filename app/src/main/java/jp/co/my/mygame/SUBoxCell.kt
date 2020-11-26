@@ -45,6 +45,16 @@ constructor(
         }
     }
 
+    fun highlightIfNeeded(highlightAnswer: String?) {
+        if (status == SUStatus.ERROR) return
+        if (highlightAnswer != null
+            && (binding.answerText.text == highlightAnswer || noteNumbers.contains(highlightAnswer))) {
+            updateState(SUStatus.HIGHLIGHT)
+        } else {
+            updateState(SUStatus.NORMAL)
+        }
+    }
+
     fun toggleNote(number: String) {
         if (noteNumbers.contains(number)) {
             noteNumbers.remove(number)

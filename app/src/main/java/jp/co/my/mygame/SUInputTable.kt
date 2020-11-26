@@ -62,15 +62,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun highlightCell(highlightAnswer: String?) {
-        boxCells.forEach { cell ->
-            if (cell.status == SUStatus.ERROR) return@forEach
-            if (highlightAnswer != null
-                && (cell.binding.answerText.text == highlightAnswer || cell.noteNumbers.contains(highlightAnswer))) {
-                cell.updateState(SUStatus.HIGHLIGHT)
-            } else {
-                cell.updateState(SUStatus.NORMAL)
-            }
-        }
+        boxCells.forEach { it.highlightIfNeeded(highlightAnswer) }
     }
 
     fun clearCells() {
