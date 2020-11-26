@@ -48,13 +48,23 @@ class MainActivity : AppCompatActivity() {
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
-        if (numbers.count() == 1 && !footer_bar.note_toggle.isChecked) {
-            newAnswer = numbers[0]
-            if (oldAnswer == newAnswer) { return@OnClickListener }
-            changedAnswers.add(newAnswer)
-        } else {
-            newNote = numbers.joinToString(separator = "")
+        when {
+            numbers.count() == 0 -> {
+                newNote = oldAnswer // 誤って上書きした時用のバックアップ
+            }
+            oldAnswer != "" -> {
+                // 誤った上書きを阻止
+                return@OnClickListener
+            }
+            footer_bar.note_toggle.isChecked -> {
+                newNote = numbers.joinToString(separator = "")
+            }
+            else -> {
+                newAnswer = numbers[0]
+                changedAnswers.add(newAnswer)
+            }
         }
+
         cell.answer_text.text = newAnswer
         cell.note_text.text = newNote
         if (newAnswer == "") {
