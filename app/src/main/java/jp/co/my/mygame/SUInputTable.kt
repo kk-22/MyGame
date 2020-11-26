@@ -8,7 +8,6 @@ import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.preference.PreferenceManager.getDefaultSharedPreferences
-import kotlinx.android.synthetic.main.su_box_cell.view.*
 import org.json.JSONArray
 
 
@@ -27,7 +26,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return boxCells.filter { it.answer_text.text == answer }
+        return boxCells.filter { it.binding.answerText.text == answer }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
@@ -55,7 +54,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     fun validateAllCell() {
         val answerList = Array(10) { mutableListOf<SUBoxCell>() }
         boxCells.forEach { cell ->
-            val answer = cell.answer_text.text
+            val answer = cell.binding.answerText.text
             if (answer == "") return@forEach
             answerList[Integer.valueOf(answer.toString())].add(cell)
         }
@@ -67,7 +66,7 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         boxCells.forEach { cell ->
             if (cell.status == SUStatus.ERROR) return@forEach
             if (highlightAnswer != null
-                && (cell.answer_text.text == highlightAnswer || regex!!.containsMatchIn(cell.note_text.text))) {
+                && (cell.binding.answerText.text == highlightAnswer || regex!!.containsMatchIn(cell.binding.noteText.text))) {
                 cell.updateState(SUStatus.HIGHLIGHT)
             } else {
                 cell.updateState(SUStatus.NORMAL)
@@ -78,14 +77,14 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
     fun clearCells() {
         // 誤って削除時に復旧できるようにpreferenceは消去しない
         boxCells.forEach { cell ->
-            cell.answer_text.text = ""
-            cell.note_text.text = ""
+            cell.binding.answerText.text = ""
+            cell.binding.noteText.text = ""
             cell.updateState(SUStatus.NORMAL)
         }
     }
 
     fun saveToPref() {
-        val texts: List<String> = boxCells.map { it.answer_text.text.toString() + "," + it.note_text.text.toString() }
+        val texts: List<String> = boxCells.map { it.binding.answerText.text.toString() + "," + it.binding.noteText.text.toString() }
         val jsonArray = JSONArray(texts)
         val pref = getDefaultSharedPreferences(context)
         pref.edit().putString("SUCellTexts", jsonArray.toString()).apply()
@@ -98,8 +97,8 @@ class SUInputTable(context: Context, attributeSet: AttributeSet) : ConstraintLay
         val jsonArray = JSONArray(json)
         for (i in 0 until jsonArray.length()) {
             val texts = jsonArray.getString(i).split(",")
-            boxCells[i].answer_text.text = texts[0]
-            boxCells[i].note_text.text = texts[1]
+            boxCells[i].binding.answerText.text = texts[0]
+            boxCells[i].binding.noteText.text = texts[1]
         }
         return true
     }

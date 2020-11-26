@@ -6,23 +6,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.su_box_cell.view.*
-import kotlinx.android.synthetic.main.su_footer_bar.view.*
+import jp.co.my.mygame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        input_table.boxCells.forEach {
+        binding.inputTable.boxCells.forEach {
             it.setOnClickListener(cellClickListener)
         }
-        if (input_table.loadFromPref()) {
-            input_table.validateAllCell()
+        if (binding.inputTable.loadFromPref()) {
+            binding.inputTable.validateAllCell()
         }
-        footer_bar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
+        binding.footerBar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.clear -> {
-                input_table.clearCells()
+                binding.inputTable.clearCells()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -43,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
     private val cellClickListener = View.OnClickListener {
         val cell = it as SUBoxCell
-        val numbers = footer_bar.selectingNumbers()
-        val oldAnswer = cell.answer_text.text.toString()
+        val numbers = binding.footerBar.selectingNumbers()
+        val oldAnswer = cell.binding.answerText.text.toString()
         val changedAnswers = mutableListOf(oldAnswer)
         var newAnswer = ""
         var newNote = ""
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
                 // 誤った上書きを阻止
                 return@OnClickListener
             }
-            footer_bar.note_toggle.isChecked -> {
+            binding.footerBar.binding.noteToggle.isChecked -> {
                 newNote = numbers.joinToString(separator = "")
             }
             else -> {
@@ -65,8 +66,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        cell.answer_text.text = newAnswer
-        cell.note_text.text = newNote
+        cell.binding.answerText.text = newAnswer
+        cell.binding.noteText.text = newNote
         if (newAnswer == "") {
             cell.updateState(SUStatus.NORMAL) // numbersが1以外ならvalidateCellsの対象外なのでここでリセット
         } else {
@@ -74,35 +75,35 @@ class MainActivity : AppCompatActivity() {
         }
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
-            val cells = input_table.filteredCells(answer)
-            input_table.validateCells(cells)
+            val cells = binding.inputTable.filteredCells(answer)
+            binding.inputTable.validateCells(cells)
 
             when {
                 cells.count() == SUInputTable.MAX_ROWS ->
                     // 9セル分の入力が完了した数字は無効化する
-                    footer_bar.enableToggle(false, answer)
+                    binding.footerBar.enableToggle(false, answer)
                 cells.count() == SUInputTable.MAX_ROWS - 1 && oldAnswer == answer ->
-                    footer_bar.enableToggle(true, answer)
+                    binding.footerBar.enableToggle(true, answer)
             }
         }
-        input_table.saveToPref()
+        binding.inputTable.saveToPref()
     }
 
     private val numberClickListener = View.OnClickListener {
         val toggle = it as ToggleButton
-        if (!footer_bar.note_toggle.isChecked && toggle.isChecked) {
+        if (!binding.footerBar.binding.noteToggle.isChecked && toggle.isChecked) {
             // 選択状態は1つのみにする
-            footer_bar.deselectToggles(toggle)
+            binding.footerBar.deselectToggles(toggle)
         }
-        val selecting = footer_bar.selectingNumbers()
+        val selecting = binding.footerBar.selectingNumbers()
         when (selecting.count()) {
             0, 2 -> {
                 // ハイライト解除
-                input_table.highlightCell(null)
+                binding.inputTable.highlightCell(null)
             }
             1 -> {
                 // ハイライトする
-                input_table.highlightCell(selecting[0])
+                binding.inputTable.highlightCell(selecting[0])
             }
             else -> {
                 // 2時点でハイライト解除済みなので更新なし

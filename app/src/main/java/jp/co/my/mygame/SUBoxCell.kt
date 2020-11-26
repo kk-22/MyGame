@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import androidx.constraintlayout.widget.ConstraintLayout
+import jp.co.my.mygame.databinding.SuBoxCellBinding
 
 enum class SUStatus {
     NORMAL, HIGHLIGHT, ERROR
@@ -24,10 +25,10 @@ constructor(
     val group: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
+    val binding = SuBoxCellBinding.inflate(LayoutInflater.from(context), this)
     var status = SUStatus.NORMAL
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.su_box_cell, this, true)
         updateState()
     }
 
