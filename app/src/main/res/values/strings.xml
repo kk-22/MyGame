@@ -15,4 +15,7 @@
     <string name="NoteOn">Note</string>
     <string name="all_clear">消去</string>
     <string name="menu_import">インポート</string>
+    <string name="webView_back">BACK</string>
+    <string name="webView_forward">FORWARD</string>
+    <string name="webView_import">IMPORT</string>
 </resources>
