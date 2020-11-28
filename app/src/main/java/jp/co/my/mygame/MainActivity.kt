@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             data?.getStringArrayExtra("NUMBER_ARRAY")?.also { numbers ->
                 binding.boxTable.clearCells()
                 binding.boxTable.boxCells.forEachIndexed { index, cell ->
-                    cell.binding.answerText.text = numbers.get(index) ?: ""
+                    cell.setAnswer(numbers[index] ?: "")
                 }
             }
         }
@@ -66,11 +66,11 @@ class MainActivity : AppCompatActivity() {
 
     private val cellClickListener = View.OnClickListener {
         val cell = it as SUBoxCell
-        val oldAnswer = cell.binding.answerText.text.toString()
+        val oldAnswer = cell.getAnswer()
         val changedAnswers = mutableListOf(oldAnswer)
         val selectedNumber = binding.footerBar.selectedNumber()
         var newAnswer = ""
-        var newNote = ""
+        var newNote: String? = null
         selectedNumber?.also { number ->
             when {
                 oldAnswer == number -> {
@@ -96,12 +96,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         // 数字の更新
-        cell.binding.answerText.text = newAnswer
-        if (newNote == "") {
-            cell.resetNote(null)
-        } else {
-            cell.toggleNote(newNote)
-        }
+        cell.setAnswer(newAnswer)
+        newNote?.also { note -> cell.toggleNote(note) }
         // Stateの更新
         cell.highlightIfNeeded(selectedNumber, false)
         changedAnswers.forEach { answer ->

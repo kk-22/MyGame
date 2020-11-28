@@ -25,7 +25,7 @@ constructor(
     val group: Int = 0,
 ) : ConstraintLayout(context, attrs, defStyleAttr, defStyleRes) {
 
-    val binding = SuBoxCellBinding.inflate(LayoutInflater.from(context), this)
+    private val binding = SuBoxCellBinding.inflate(LayoutInflater.from(context), this)
     val noteNumbers = mutableListOf<String>()
     var status = SUStatus.NORMAL
 
@@ -53,6 +53,15 @@ constructor(
         } else {
             updateState(SUStatus.NORMAL)
         }
+    }
+
+    fun setAnswer(answer: String) {
+        binding.answerText.text = answer
+        binding.noteText.visibility = if (answer == "") VISIBLE else INVISIBLE
+    }
+
+    fun getAnswer(): String {
+        return binding.answerText.text.toString()
     }
 
     fun toggleNote(number: String) {

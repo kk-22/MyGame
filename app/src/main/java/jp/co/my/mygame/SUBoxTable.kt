@@ -26,7 +26,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return boxCells.filter { it.binding.answerText.text == answer }
+        return boxCells.filter { it.getAnswer() == answer }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
@@ -54,9 +54,9 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     fun validateAllCell() {
         val answerList = Array(10) { mutableListOf<SUBoxCell>() }
         boxCells.forEach { cell ->
-            val answer = cell.binding.answerText.text
+            val answer = cell.getAnswer()
             if (answer == "") return@forEach
-            answerList[Integer.valueOf(answer.toString())].add(cell)
+            answerList[Integer.valueOf(answer)].add(cell)
         }
         answerList.forEach { validateCells(it) }
     }
@@ -68,14 +68,14 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     fun clearCells() {
         // 誤って削除時に復旧できるようにpreferenceは消去しない
         boxCells.forEach { cell ->
-            cell.binding.answerText.text = ""
+            cell.setAnswer("")
             cell.resetNote(null)
             cell.updateState(SUStatus.NORMAL)
         }
     }
 
     fun saveToPref() {
-        val texts: List<String> = boxCells.map { it.binding.answerText.text.toString() + "," + it.noteNumbers.joinToString(separator = "") }
+        val texts: List<String> = boxCells.map { it.getAnswer() + "," + it.noteNumbers.joinToString(separator = "") }
         val jsonArray = JSONArray(texts)
         val pref = getDefaultSharedPreferences(context)
         pref.edit().putString("SUCellTexts", jsonArray.toString()).apply()
@@ -88,7 +88,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         val jsonArray = JSONArray(json)
         for (i in 0 until jsonArray.length()) {
             val texts = jsonArray.getString(i).split(",")
-            boxCells[i].binding.answerText.text = texts[0]
+            boxCells[i].setAnswer(texts[0])
             boxCells[i].resetNote(texts[1].split("").filter { it != "" })
         }
         return true
