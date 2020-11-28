@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                 binding.boxTable.boxCells.forEachIndexed { index, cell ->
                     cell.setAnswer(numbers[index] ?: "")
                 }
+                binding.boxTable.validateAllCell()
             }
         }
     }
@@ -104,12 +105,13 @@ class MainActivity : AppCompatActivity() {
             if (answer == "") { return@forEach }
             val cells = binding.boxTable.filteredCells(answer)
             binding.boxTable.validateCells(cells)
+            val countOnlyAnswer = cells.count { cell -> cell.hasAnswer() && cell.status != SUStatus.ERROR }
             // フッターの更新
             when {
-                cells.count() == SUBoxTable.MAX_ROWS ->
+                countOnlyAnswer == SUBoxTable.MAX_ROWS ->
                     // 9セル分の入力が完了した数字は無効化する
                     binding.footerBar.enableToggle(false, answer)
-                cells.count() == SUBoxTable.MAX_ROWS - 1 && oldAnswer == answer ->
+                countOnlyAnswer == SUBoxTable.MAX_ROWS - 1 && newAnswer == "" ->
                     binding.footerBar.enableToggle(true, answer)
             }
         }

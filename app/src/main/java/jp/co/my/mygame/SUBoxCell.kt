@@ -64,6 +64,10 @@ constructor(
         return binding.answerText.text.toString()
     }
 
+    fun hasAnswer(): Boolean {
+        return getAnswer() != ""
+    }
+
     fun toggleNote(number: String) {
         if (noteNumbers.contains(number)) {
             noteNumbers.remove(number)
