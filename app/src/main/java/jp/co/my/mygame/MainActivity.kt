@@ -11,6 +11,10 @@ import jp.co.my.mygame.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val REQUEST_CODE_WEB_VIEW = 1234
+    }
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +31,18 @@ class MainActivity : AppCompatActivity() {
         binding.footerBar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_WEB_VIEW) {
+            data?.getStringArrayExtra("NUMBER_ARRAY").also { numbers ->
+                binding.boxTable.clearCells()
+                binding.boxTable.boxCells.forEachIndexed { index, cell ->
+                    cell.binding.answerText.text = numbers?.get(index) ?: ""
+                }
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         super.onCreateOptionsMenu(menu)
         menuInflater.inflate(R.menu.su_menu, menu)
@@ -37,7 +53,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.menu_import -> {
                 val intent = Intent(applicationContext, SUWebViewActivity::class.java)
-                startActivity(intent)
+                startActivityForResult(intent, REQUEST_CODE_WEB_VIEW)
                 true
             }
             R.id.menu_clear -> {

@@ -2,6 +2,8 @@
   <dictionary name="doran">
     <words>
       <w>constraintlayout</w>
+      <w>emage</w>
+      <w>trleft</w>
     </words>
   </dictionary>
 </component>
