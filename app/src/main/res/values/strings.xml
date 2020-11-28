@@ -14,4 +14,5 @@
     <string name="NoteOff">Note</string>
     <string name="NoteOn">Note</string>
     <string name="all_clear">消去</string>
+    <string name="menu_import">インポート</string>
 </resources>

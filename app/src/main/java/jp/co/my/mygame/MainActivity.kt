@@ -1,5 +1,6 @@
 package jp.co.my.mygame
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -34,7 +35,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.clear -> {
+            R.id.menu_import -> {
+                val intent = Intent(applicationContext, SUWebViewActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            R.id.menu_clear -> {
                 binding.boxTable.clearCells()
                 true
             }
