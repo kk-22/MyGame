@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_WEB_VIEW) {
-            data?.getStringArrayExtra("NUMBER_ARRAY").also { numbers ->
+            data?.getStringArrayExtra("NUMBER_ARRAY")?.also { numbers ->
                 binding.boxTable.clearCells()
                 binding.boxTable.boxCells.forEachIndexed { index, cell ->
-                    cell.binding.answerText.text = numbers?.get(index) ?: ""
+                    cell.binding.answerText.text = numbers.get(index) ?: ""
                 }
             }
         }
