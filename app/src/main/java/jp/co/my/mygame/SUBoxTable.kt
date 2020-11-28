@@ -69,7 +69,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         // 誤って削除時に復旧できるようにpreferenceは消去しない
         boxCells.forEach { cell ->
             cell.binding.answerText.text = ""
-            cell.binding.noteText.text = ""
+            cell.resetNote(null)
             cell.updateState(SUStatus.NORMAL)
         }
     }

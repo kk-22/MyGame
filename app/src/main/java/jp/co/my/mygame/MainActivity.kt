@@ -53,9 +53,11 @@ class MainActivity : AppCompatActivity() {
             when {
                 oldAnswer == number -> {
                     // 前の操作時に誤って入力した数字を削除する
-                    newAnswer = ""
+                    if (binding.footerBar.binding.noteToggle.isChecked) {
+                        newNote = number
+                    }
                 }
-                oldAnswer != "" -> {
+                oldAnswer != "" && cell.status != SUStatus.ERROR -> {
                     // 誤った上書きを阻止
                     return@OnClickListener
                 }
