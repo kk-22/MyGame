@@ -26,7 +26,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return boxCells.filter { it.getAnswer() == answer }
+        return boxCells.filter { it.getAnswer() == answer || it.noteNumbers.contains(answer) }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
@@ -46,6 +46,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         listOf(groupList, xList, yList).forEach { list ->
             list.forEach inner@{ cells ->
                 if (cells.count() <= 1) { return@inner }
+                if (cells.find { it.hasAnswer() } == null) { return@inner } // メモ同士なら問題無し
                 cells.forEach { cell -> cell.updateState(SUStatus.ERROR) }
             }
         }
@@ -54,9 +55,11 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     fun validateAllCell() {
         val answerList = Array(10) { mutableListOf<SUBoxCell>() }
         boxCells.forEach { cell ->
-            val answer = cell.getAnswer()
-            if (answer == "") return@forEach
-            answerList[Integer.valueOf(answer)].add(cell)
+            if (cell.hasAnswer()) {
+                answerList[Integer.valueOf(cell.getAnswer())].add(cell)
+                return@forEach
+            }
+            cell.noteNumbers.forEach { answerList[Integer.valueOf(it)].add(cell) }
         }
         answerList.forEach { validateCells(it) }
     }
