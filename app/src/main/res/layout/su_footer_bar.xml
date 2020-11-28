@@ -7,6 +7,7 @@
 
     <ToggleButton
         android:id="@+id/number1_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number1"
@@ -20,6 +21,7 @@
 
     <ToggleButton
         android:id="@+id/number2_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number2"
@@ -31,6 +33,7 @@
 
     <ToggleButton
         android:id="@+id/number3_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number3"
@@ -42,6 +45,7 @@
 
     <ToggleButton
         android:id="@+id/number4_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number4"
@@ -53,6 +57,7 @@
 
     <ToggleButton
         android:id="@+id/number5_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number5"
@@ -64,6 +69,7 @@
 
     <ToggleButton
         android:id="@+id/number6_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number6"
@@ -76,6 +82,7 @@
 
     <ToggleButton
         android:id="@+id/number7_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number7"
@@ -87,6 +94,7 @@
 
     <ToggleButton
         android:id="@+id/number8_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number8"
@@ -98,6 +106,7 @@
 
     <ToggleButton
         android:id="@+id/number9_toggle"
+        style="@style/SUNumberToggle"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:textOff="@string/number9"
@@ -111,6 +120,7 @@
         android:id="@+id/note_toggle"
         android:layout_width="70dp"
         android:layout_height="0dp"
+        android:background="@drawable/su_number_toggle"
         android:textOff="@string/NoteOff"
         android:textOn="@string/NoteOn"
         app:layout_constraintBottom_toBottomOf="parent"

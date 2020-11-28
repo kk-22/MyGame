@@ -7,4 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="SUNumberToggle">
+        <item name="android:background">@drawable/su_number_toggle</item>
+    </style>
 </resources>
