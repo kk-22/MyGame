@@ -36,10 +36,11 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
         }
     }
 
-    fun enableToggle(isEnable: Boolean, number: String) {
+    fun enableToggle(newEnable: Boolean, number: String) {
         numberToggles.forEach { toggle ->
             if (toggle.textOn != number) { return@forEach }
-            toggle.isEnabled = isEnable
+            if (toggle.isEnabled == newEnable) { return }
+            toggle.isEnabled = newEnable
             toggle.isChecked = false
         }
     }
