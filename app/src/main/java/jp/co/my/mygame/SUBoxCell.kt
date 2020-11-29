@@ -47,12 +47,18 @@ constructor(
 
     fun highlightIfNeeded(highlightAnswer: String?, skipIfError: Boolean = true) {
         if (status == SUStatus.ERROR && skipIfError) return
-        if (highlightAnswer != null
-            && (binding.answerText.text == highlightAnswer || noteNumbers.contains(highlightAnswer))) {
+        if (highlightAnswer != null && hasNumber(highlightAnswer)) {
             updateState(SUStatus.HIGHLIGHT)
         } else {
             updateState(SUStatus.NORMAL)
         }
+    }
+
+    fun hasNumber(number: String): Boolean {
+        if (hasAnswer()) {
+            return binding.answerText.text == number
+        }
+        return noteNumbers.contains(number)
     }
 
     fun setAnswer(answer: String) {
