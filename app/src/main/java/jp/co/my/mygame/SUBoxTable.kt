@@ -26,7 +26,7 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     }
 
     fun filteredCells(answer: String): List<SUBoxCell> {
-        return boxCells.filter { it.getAnswer() == answer || it.noteNumbers.contains(answer) }
+        return boxCells.filter { it.hasNumber(answer) }
     }
 
     fun validateCells(cells: List<SUBoxCell>) {
