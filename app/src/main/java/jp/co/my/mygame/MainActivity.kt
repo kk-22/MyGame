@@ -100,6 +100,10 @@ class MainActivity : AppCompatActivity() {
         cell.setAnswer(newAnswer)
         newNote?.also { note -> cell.toggleNote(note) }
         // Stateの更新
+        if (oldAnswer == "" && oldAnswer != newAnswer) {
+            changedAnswers.addAll(cell.noteNumbers)
+            changedAnswers.distinct()
+        }
         cell.highlightIfNeeded(selectedNumber, false)
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
