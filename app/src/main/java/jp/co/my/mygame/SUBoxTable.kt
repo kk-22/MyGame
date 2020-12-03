@@ -68,15 +68,6 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         boxCells.forEach { it.highlightIfNeeded(highlightAnswer) }
     }
 
-    fun clearCells() {
-        // 誤って削除時に復旧できるようにpreferenceは消去しない
-        boxCells.forEach { cell ->
-            cell.setAnswer("")
-            cell.resetNote(null)
-            cell.updateState(SUStatus.NORMAL)
-        }
-    }
-
     fun saveToPref() {
         val texts: List<String> = boxCells.map { it.getAnswer() + "," + it.noteNumbers.joinToString(separator = "") }
         val jsonArray = JSONArray(texts)
