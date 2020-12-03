@@ -47,6 +47,11 @@
             android:layout_weight="1"
             style="?android:attr/buttonBarButtonStyle"
             android:text="@string/webView_import" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
