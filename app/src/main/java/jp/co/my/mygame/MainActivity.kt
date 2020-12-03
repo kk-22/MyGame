@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_CODE_WEB_VIEW) {
             data?.getStringArrayExtra("NUMBER_ARRAY")?.also { numbers ->
-                binding.boxTable.clearCells()
+                clearCells()
                 binding.boxTable.boxCells.forEachIndexed { index, cell ->
                     cell.setAnswer(numbers[index] ?: "")
                 }
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_clear -> {
-                binding.boxTable.clearCells()
+                clearCells()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -131,5 +131,18 @@ class MainActivity : AppCompatActivity() {
             selectingNumber = toggle.textOn.toString()
         }
         binding.boxTable.highlightCell(selectingNumber)
+    }
+
+    private fun clearCells() {
+        // 誤って削除時に復旧できるようにpreferenceは消去しない
+        binding.boxTable.boxCells.forEach { cell ->
+            cell.setAnswer("")
+            cell.resetNote(null)
+            cell.updateState(SUStatus.NORMAL)
+        }
+        binding.footerBar.numberToggles.forEach {
+            it.isEnabled = true
+            it.isChecked = false
+        }
     }
 }
