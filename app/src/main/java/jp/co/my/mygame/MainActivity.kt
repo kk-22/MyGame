@@ -119,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                     binding.footerBar.enableToggle(true, answer)
             }
         }
+        binding.boxTable.highlightCell(selectedNumber) // エラー解除したCellをハイライトし直す
         binding.boxTable.saveToPref()
     }
 
