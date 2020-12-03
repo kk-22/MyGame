@@ -42,7 +42,10 @@ class SUWebViewActivity: AppCompatActivity() {
         val imageTags = tableTag.getElementsByAttribute("src")
         imageTags.take(maxCount).forEachIndexed { index, imageTag ->
             val srcValue = imageTag.attributes().get("src")
-            Log.d("trg", "$index $srcValue")
+            if (srcValue == "image/gray.png") {
+                Log.d("tag", "パズルが表示されていない")
+                return
+            }
             when (srcValue) {
                 "emage/white.png" -> numbers.add("")
                 else -> {
