@@ -45,9 +45,13 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         // 検証
         listOf(groupList, xList, yList).forEach { list ->
             list.forEach inner@{ cells ->
-                if (cells.count() <= 1) { return@inner }
-                if (cells.find { it.hasAnswer() } == null) { return@inner } // メモ同士なら問題無し
-                cells.forEach { cell -> cell.updateState(SUStatus.ERROR) }
+                if (cells.count() <= 1) { return@inner } // 重複は無いためエラー無し
+                val answerCount = cells.count { it.hasAnswer() }
+                if (answerCount == 0) { return@inner } // メモ同士なら問題無し
+                cells.forEach innerCell@{ cell ->
+                    if (answerCount == 1 && cell.hasAnswer()) { return@innerCell } // 答えが1つならNoteだけエラー表示
+                    cell.updateState(SUStatus.ERROR)
+                }
             }
         }
     }
