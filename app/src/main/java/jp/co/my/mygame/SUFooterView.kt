@@ -7,7 +7,7 @@ import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import jp.co.my.mygame.databinding.SuFooterBarBinding
 
-class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayout(
+class SUFooterView(context: Context, attributeSet: AttributeSet) : ConstraintLayout(
     context,
     attributeSet
 ) {
