@@ -31,9 +31,9 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
 
     fun validateCells(cells: List<SUBoxCell>) {
         // 縦・横・グループ毎に分別
-        val groupList = Array(10) { mutableListOf<SUBoxCell>() }
-        val xList = Array(10) { mutableListOf<SUBoxCell>() }
-        val yList = Array(10) { mutableListOf<SUBoxCell>() }
+        val groupList = Array(MAX_ROWS) { mutableListOf<SUBoxCell>() }
+        val xList = Array(MAX_ROWS) { mutableListOf<SUBoxCell>() }
+        val yList = Array(MAX_ROWS) { mutableListOf<SUBoxCell>() }
         cells.forEach { cell ->
             groupList[cell.group].add(cell)
             xList[cell.x].add(cell)
@@ -69,7 +69,29 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
     }
 
     fun highlightCell(highlightAnswer: String?) {
-        boxCells.forEach { it.highlightIfNeeded(highlightAnswer) }
+        // 縦・横・グループ毎に数字が入力済みならtrue
+        val answeredEachGroup = Array(MAX_ROWS) { false }
+        val answeredEachX = Array(MAX_ROWS) { false }
+        val answeredEachY = Array(MAX_ROWS) { false }
+        val blankCells = mutableListOf<SUBoxCell>()
+        boxCells.forEach { cell ->
+            if (cell.status == SUStatus.ERROR) { return@forEach }
+            cell.highlightIfNeeded(highlightAnswer) // ハイライトリセット
+            if (highlightAnswer == null) { return@forEach }
+            if (cell.getAnswer() == highlightAnswer) {
+                answeredEachGroup[cell.group] = true
+                answeredEachX[cell.x] = true
+                answeredEachY[cell.y] = true
+            } else if (!cell.hasAnswer()) {
+                blankCells.add(cell)
+            }
+        }
+        // 数字が入力可能なセルをハイライト
+        blankCells.forEach { cell ->
+            if (!answeredEachGroup[cell.group] && !answeredEachX[cell.x] && !answeredEachY[cell.y]) {
+                cell.updateState(SUStatus.HIGHLIGHT)
+            }
+        }
     }
 
     fun saveToPref() {
