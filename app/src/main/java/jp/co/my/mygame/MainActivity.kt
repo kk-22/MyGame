@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         if (binding.boxTable.loadFromPref()) {
             binding.boxTable.validateAllCell()
         }
-        binding.footerBar.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
+        binding.footerView.numberToggles.forEach { it.setOnClickListener(numberClickListener) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -69,14 +69,14 @@ class MainActivity : AppCompatActivity() {
         val cell = it as SUBoxCell
         val oldAnswer = cell.getAnswer()
         val changedAnswers = mutableListOf(oldAnswer)
-        val selectedNumber = binding.footerBar.selectedNumber()
+        val selectedNumber = binding.footerView.selectedNumber()
         var newAnswer = ""
         var newNote: String? = null
         selectedNumber?.also { number ->
             when {
                 oldAnswer == number -> {
                     // 前の操作時に誤って入力した数字を削除する
-                    if (binding.footerBar.isEnableNote()) {
+                    if (binding.footerView.isEnableNote()) {
                         newNote = number
                     }
                 }
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     // 誤った上書きを阻止
                     return@OnClickListener
                 }
-                binding.footerBar.isEnableNote() -> {
+                binding.footerView.isEnableNote() -> {
                     newNote = number
                 }
                 else -> {
@@ -114,9 +114,9 @@ class MainActivity : AppCompatActivity() {
             when {
                 countOnlyAnswer == SUBoxTable.MAX_ROWS ->
                     // 9セル分の入力が完了した数字は無効化する
-                    binding.footerBar.enableToggle(false, answer)
+                    binding.footerView.enableToggle(false, answer)
                 countOnlyAnswer == SUBoxTable.MAX_ROWS - 1 && newAnswer == "" ->
-                    binding.footerBar.enableToggle(true, answer)
+                    binding.footerView.enableToggle(true, answer)
             }
         }
         binding.boxTable.highlightCell(selectedNumber) // エラー解除したCellをハイライトし直す
@@ -128,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         var selectingNumber: String? = null
         if (toggle.isChecked) {
             // 選択状態は1つのみにする
-            binding.footerBar.deselectToggles(toggle)
+            binding.footerView.deselectToggles(toggle)
             selectingNumber = toggle.textOn.toString()
         }
         binding.boxTable.highlightCell(selectingNumber)
@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity() {
             cell.resetNote(null)
             cell.updateState(SUStatus.NORMAL)
         }
-        binding.footerBar.numberToggles.forEach {
+        binding.footerView.numberToggles.forEach {
             it.isEnabled = true
             it.isChecked = false
         }

@@ -12,13 +12,13 @@
         android:layout_height="wrap_content"
         android:background="#00ff00"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintBottom_toTopOf="@+id/footer_bar"
+        app:layout_constraintBottom_toTopOf="@+id/footer_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <jp.co.my.mygame.SUFooterBar
-        android:id="@+id/footer_bar"
+    <jp.co.my.mygame.SUFooterView
+        android:id="@+id/footer_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
