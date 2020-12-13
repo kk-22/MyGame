@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             val countOnlyAnswer = cells.count { cell -> cell.hasAnswer() && cell.status != SUStatus.ERROR }
             // フッターの更新
             when {
-                countOnlyAnswer == SUBoxTable.MAX_ROWS ->
+                countOnlyAnswer == SUBoxTable.MAX_ROWS && countOnlyAnswer == cells.count() ->
                     // 9セル分の入力が完了した数字は無効化する
                     binding.footerView.enableToggle(false, answer)
                 countOnlyAnswer == SUBoxTable.MAX_ROWS - 1 && newAnswer == "" ->
