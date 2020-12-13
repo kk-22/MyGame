@@ -12,7 +12,7 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
     attributeSet
 ) {
 
-    val binding = SuFooterBarBinding.inflate(LayoutInflater.from(context), this, true)
+    private val binding = SuFooterBarBinding.inflate(LayoutInflater.from(context), this, true)
     val numberToggles: List<ToggleButton>
 
     init {
