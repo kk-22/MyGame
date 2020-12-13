@@ -6,6 +6,17 @@
     android:layout_height="wrap_content">
 
     <ToggleButton
+        android:id="@+id/left_note_toggle"
+        android:layout_width="70dp"
+        android:layout_height="0dp"
+        android:background="@drawable/su_number_toggle"
+        android:textOff="@string/NoteOff"
+        android:textOn="@string/NoteOn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ToggleButton
         android:id="@+id/number1_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -15,7 +26,7 @@
         app:layout_constraintBottom_toTopOf="@id/number4_toggle"
         app:layout_constraintEnd_toStartOf="@id/number2_toggle"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/left_note_toggle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
@@ -39,7 +50,7 @@
         android:textOff="@string/number3"
         android:textOn="@string/number3"
         app:layout_constraintBottom_toBottomOf="@id/number1_toggle"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/right_note_toggle"
         app:layout_constraintStart_toEndOf="@+id/number2_toggle"
         app:layout_constraintTop_toTopOf="@id/number1_toggle" />
 
@@ -117,7 +128,7 @@
         app:layout_constraintTop_toTopOf="@+id/number7_toggle" />
 
     <ToggleButton
-        android:id="@+id/note_toggle"
+        android:id="@+id/right_note_toggle"
         android:layout_width="70dp"
         android:layout_height="0dp"
         android:background="@drawable/su_number_toggle"

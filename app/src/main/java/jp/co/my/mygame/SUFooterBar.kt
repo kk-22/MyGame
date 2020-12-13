@@ -21,6 +21,9 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
             R.id.number5_toggle, R.id.number6_toggle, R.id.number7_toggle, R.id.number8_toggle, R.id.number9_toggle
         )
         numberToggles = numberIds.map { findViewById<ToggleButton>(it) }
+
+        binding.leftNoteToggle.setOnCheckedChangeListener { _, value -> binding.rightNoteToggle.isChecked = value }
+        binding.rightNoteToggle.setOnCheckedChangeListener { _, value -> binding.leftNoteToggle.isChecked = value }
     }
 
     fun selectedNumber(): String? {
@@ -43,5 +46,9 @@ class SUFooterBar(context: Context, attributeSet: AttributeSet) : ConstraintLayo
             toggle.isEnabled = newEnable
             toggle.isChecked = false
         }
+    }
+
+    fun isEnableNote(): Boolean {
+        return binding.leftNoteToggle.isChecked
     }
 }

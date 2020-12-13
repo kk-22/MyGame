@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             when {
                 oldAnswer == number -> {
                     // 前の操作時に誤って入力した数字を削除する
-                    if (binding.footerBar.binding.noteToggle.isChecked) {
+                    if (binding.footerBar.isEnableNote()) {
                         newNote = number
                     }
                 }
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
                     // 誤った上書きを阻止
                     return@OnClickListener
                 }
-                binding.footerBar.binding.noteToggle.isChecked -> {
+                binding.footerBar.isEnableNote() -> {
                     newNote = number
                 }
                 else -> {
