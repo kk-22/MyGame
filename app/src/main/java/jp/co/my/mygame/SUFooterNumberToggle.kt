@@ -18,7 +18,7 @@ class SUFooterNumberToggle(
         if (!isEnabled && event.action == MotionEvent.ACTION_DOWN) {
             // 無効化中を振動で通知
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            val vibrationEffect = VibrationEffect.createOneShot(100, 128)
+            val vibrationEffect = VibrationEffect.createOneShot(50, 30)
             vibrator.vibrate(vibrationEffect)
         }
         return super.onTouchEvent(event)
