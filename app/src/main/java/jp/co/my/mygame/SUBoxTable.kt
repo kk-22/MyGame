@@ -38,9 +38,6 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
             groupList[cell.group].add(cell)
             xList[cell.x].add(cell)
             yList[cell.y].add(cell)
-            if (cell.status == SUStatus.ERROR) {
-                cell.updateState(SUStatus.NORMAL) // エラーでは無くなった可能性があるためリセット
-            }
         }
         // 検証
         listOf(groupList, xList, yList).forEach { list ->
@@ -56,7 +53,16 @@ class SUBoxTable(context: Context, attributeSet: AttributeSet) : ConstraintLayou
         }
     }
 
+    fun resetError() {
+        boxCells.forEach { cell ->
+            if (cell.status == SUStatus.ERROR) {
+                cell.updateState(SUStatus.NORMAL)
+            }
+        }
+    }
+
     fun validateAllCell() {
+        resetError()
         val answerList = Array(10) { mutableListOf<SUBoxCell>() }
         boxCells.forEach { cell ->
             if (cell.hasAnswer()) {

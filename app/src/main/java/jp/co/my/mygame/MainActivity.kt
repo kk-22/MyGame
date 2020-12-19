@@ -105,6 +105,7 @@ class MainActivity : AppCompatActivity() {
             changedAnswers.distinct()
         }
         cell.highlightIfNeeded(selectedNumber, false)
+        binding.boxTable.resetError()
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
             val cells = binding.boxTable.filteredCells(answer)
