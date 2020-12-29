@@ -108,7 +108,18 @@ class MainActivity : AppCompatActivity() {
         binding.boxTable.resetError()
         changedAnswers.forEach { answer ->
             if (answer == "") { return@forEach }
-            val cells = binding.boxTable.filteredCells(answer)
+            var cells = binding.boxTable.filteredCells(answer)
+            if (answer == newAnswer) {
+                cells = cells.filter { sameCell ->
+                    // 答えと同じ値のメモを周囲から取り除く
+                    if (!sameCell.hasAnswer() &&
+                        (sameCell.x == cell.x || sameCell.y == cell.y || sameCell.group == cell.group)) {
+                        sameCell.toggleNote(newAnswer)
+                        return@filter true
+                    }
+                    false
+                }
+            }
             binding.boxTable.validateCells(cells)
             val countOnlyAnswer = cells.count { cell -> cell.hasAnswer() && cell.status != SUStatus.ERROR }
             // フッターの更新
