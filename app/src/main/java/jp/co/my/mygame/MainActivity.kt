@@ -115,9 +115,9 @@ class MainActivity : AppCompatActivity() {
                     if (!sameCell.hasAnswer() &&
                         (sameCell.x == cell.x || sameCell.y == cell.y || sameCell.group == cell.group)) {
                         sameCell.toggleNote(newAnswer)
-                        return@filter true
+                        return@filter false
                     }
-                    false
+                    return@filter true
                 }
             }
             binding.boxTable.validateCells(cells)
