@@ -22,6 +22,10 @@
         </activity>
 
         <activity
+            android:name="jp.co.my.mysen.SEPlayActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name="jp.co.my.sudoku.SUPlayActivity"
             android:screenOrientation="portrait"/>
         <activity
