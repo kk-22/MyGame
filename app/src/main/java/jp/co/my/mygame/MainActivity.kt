@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import jp.co.my.mygame.databinding.ActivityMainBinding
+import jp.co.my.mysen.SEPlayActivity
 import jp.co.my.sudoku.SUPlayActivity
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +16,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.mysenButton.setOnClickListener {
+            val intent = Intent(applicationContext, SEPlayActivity::class.java)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+        }
         binding.sudokuButton.setOnClickListener {
             val intent = Intent(applicationContext, SUPlayActivity::class.java)
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
