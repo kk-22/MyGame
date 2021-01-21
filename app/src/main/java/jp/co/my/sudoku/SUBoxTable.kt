@@ -1,4 +1,4 @@
-package jp.co.my.mygame
+package jp.co.my.sudoku
 
 import android.content.Context
 import android.content.Context.WINDOW_SERVICE

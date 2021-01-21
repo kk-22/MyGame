@@ -1,10 +1,11 @@
-package jp.co.my.mygame
+package jp.co.my.sudoku
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ToggleButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SuFooterBarBinding
 
 class SUFooterView(context: Context, attributeSet: AttributeSet) : ConstraintLayout(
@@ -17,8 +18,15 @@ class SUFooterView(context: Context, attributeSet: AttributeSet) : ConstraintLay
 
     init {
         val numberIds = arrayOf(
-            R.id.number1_toggle, R.id.number2_toggle, R.id.number3_toggle, R.id.number4_toggle,
-            R.id.number5_toggle, R.id.number6_toggle, R.id.number7_toggle, R.id.number8_toggle, R.id.number9_toggle
+            R.id.number1_toggle,
+            R.id.number2_toggle,
+            R.id.number3_toggle,
+            R.id.number4_toggle,
+            R.id.number5_toggle,
+            R.id.number6_toggle,
+            R.id.number7_toggle,
+            R.id.number8_toggle,
+            R.id.number9_toggle
         )
         numberToggles = numberIds.map { findViewById<ToggleButton>(it) }
 

@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number1_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -30,7 +30,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number2_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toEndOf="@+id/number1_toggle"
         app:layout_constraintTop_toTopOf="@id/number1_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number3_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -54,7 +54,7 @@
         app:layout_constraintStart_toEndOf="@+id/number2_toggle"
         app:layout_constraintTop_toTopOf="@id/number1_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number4_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="@id/number1_toggle"
         app:layout_constraintTop_toBottomOf="@+id/number1_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number5_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -78,7 +78,7 @@
         app:layout_constraintStart_toStartOf="@+id/number2_toggle"
         app:layout_constraintTop_toTopOf="@+id/number4_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number6_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -91,7 +91,7 @@
         app:layout_constraintTop_toTopOf="@+id/number4_toggle"
         app:layout_constraintVertical_bias="0.0" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number7_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -103,7 +103,7 @@
         app:layout_constraintStart_toStartOf="@+id/number4_toggle"
         app:layout_constraintTop_toBottomOf="@id/number4_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number8_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
@@ -115,7 +115,7 @@
         app:layout_constraintStart_toStartOf="@+id/number5_toggle"
         app:layout_constraintTop_toTopOf="@+id/number7_toggle" />
 
-    <jp.co.my.mygame.SUFooterNumberToggle
+    <jp.co.my.sudoku.SUFooterNumberToggle
         android:id="@+id/number9_toggle"
         style="@style/SUNumberToggle"
         android:layout_width="80dp"
