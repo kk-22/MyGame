@@ -18,4 +18,6 @@
     <string name="webView_back">BACK</string>
     <string name="webView_forward">FORWARD</string>
     <string name="webView_import">IMPORT</string>
+    <string name="title_sudoku">数独</string>
+    <string name="title_mysen">MySen</string>
 </resources>
