@@ -1,4 +1,4 @@
-package jp.co.my.mygame
+package jp.co.my.sudoku
 
 import android.annotation.SuppressLint
 import android.content.Intent
