@@ -7,19 +7,19 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
-import jp.co.my.mygame.databinding.ActivityMainBinding
+import jp.co.my.mygame.databinding.SuPlayActivityBinding
 
-class MainActivity : AppCompatActivity() {
+class SUPlayActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_CODE_WEB_VIEW = 1234
     }
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: SuPlayActivityBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = SuPlayActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.boxTable.boxCells.forEach {
