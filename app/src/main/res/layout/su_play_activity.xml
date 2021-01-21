@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".SUPlayActivity">
 
     <jp.co.my.mygame.SUBoxTable
         android:id="@+id/box_table"
