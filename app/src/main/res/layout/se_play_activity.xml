@@ -4,5 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="jp.co.my.sudoku.SUPlayActivity">
-    
+
+    <jp.co.my.mysen.SEFieldView
+        android:id="@+id/field_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
