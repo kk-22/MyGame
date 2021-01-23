@@ -28,7 +28,7 @@ class SUFooterView(context: Context, attributeSet: AttributeSet) : ConstraintLay
             R.id.number8_toggle,
             R.id.number9_toggle
         )
-        numberToggles = numberIds.map { findViewById<ToggleButton>(it) }
+        numberToggles = numberIds.map { findViewById(it) }
 
         binding.leftNoteToggle.setOnCheckedChangeListener { _, value -> binding.rightNoteToggle.isChecked = value }
         binding.rightNoteToggle.setOnCheckedChangeListener { _, value -> binding.leftNoteToggle.isChecked = value }

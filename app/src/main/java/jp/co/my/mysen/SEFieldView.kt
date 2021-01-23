@@ -44,7 +44,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         val y = (LAND_WIDTH_AND_HEIGHT * land.y + LAND_MARGIN * (land.y + 1)).toFloat()
         renderCanvas.drawBitmap(SELand.Type.image(context, land.type), x, y, null)
 
-        if (!land.units.isEmpty()) {
+        if (land.units.isNotEmpty()) {
             renderCanvas.drawBitmap(
                 R.drawable.se_unit.createBitmap(UNIT_WIDTH, UNIT_HEIGHT, context),
                 x + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,

@@ -9,8 +9,6 @@
     <string name="number7">7</string>
     <string name="number8">8</string>
     <string name="number9">9</string>
-    <string name="clear">Clear</string>
-    <string name="dummy">dummy</string>
     <string name="NoteOff">Note</string>
     <string name="NoteOn">Note</string>
     <string name="all_clear">消去</string>
