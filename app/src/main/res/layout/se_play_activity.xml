@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context="jp.co.my.sudoku.SUPlayActivity">
 
+    <ProgressBar
+        android:id="@+id/day_progressbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="100dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <jp.co.my.mysen.SEFieldView
         android:id="@+id/field_view"
         android:layout_width="match_parent"

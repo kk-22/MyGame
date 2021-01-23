@@ -6,7 +6,7 @@ import java.util.*
 
 class SEUserInterface(private val balance: SEGameBalance, private val listener: UserInterfaceListener) {
     private var phase = Phase.Order
-    private var remainingDay = 0 // 進行フェーズの残り日数
+    private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
 
@@ -20,10 +20,12 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
 
     private fun setPhase(nextPhase: Phase) {
         Log.d("tag", "setPhase $nextPhase")
+        val prevPhase = phase
+        phase = nextPhase
         timer.cancel()
         if (nextPhase == Phase.Advance) {
-            if (phase == Phase.Order) {
-                remainingDay = balance.interfaceMaxDay
+            if (prevPhase == Phase.Order) {
+                day = 0
             }
             timer = Timer()
             timer.schedule(object : TimerTask() {
@@ -32,8 +34,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                 }
             }, balance.interfaceIntervalSec * 1000, balance.interfaceIntervalSec * 1000)
         }
-        phase = nextPhase
-        listener.didChangePhase(nextPhase)
+        listener.didChangePhase(prevPhase, nextPhase)
     }
 
     fun changeButtonTitle() : String {
@@ -45,10 +46,10 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     }
 
     private fun elapseDay() {
-        Log.d("tag", "elapse day remaining=$remainingDay")
-        remainingDay -= 1
-        if (0 <= remainingDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
-            listener.didChangeDay(remainingDay)
+        Log.d("tag", "elapse day $day")
+        day++
+        if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
+            listener.didChangeDay(day)
             return
         }
 
@@ -63,7 +64,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     }
 
     interface UserInterfaceListener {
-        fun didChangePhase(phase: Phase)
-        fun didChangeDay(remainingDay: Int)
+        fun didChangePhase(prevPhase: Phase, nextPhase: Phase)
+        fun didChangeDay(day: Int)
     }
 }
