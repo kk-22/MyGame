@@ -20,4 +20,5 @@
     <string name="webView_import">IMPORT</string>
     <string name="title_sudoku">数独</string>
     <string name="title_mysen">MySen</string>
+    <string name="menu_back">戻る</string>
 </resources>
