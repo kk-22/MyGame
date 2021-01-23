@@ -26,7 +26,7 @@ open class SosotataImageView
     private lateinit var mRenderBitmap: Bitmap
 
     /** 拡大縮小、スクロール演算用マトリクス */
-    private val mRenderMatrix: Matrix = Matrix()
+    protected val mRenderMatrix: Matrix = Matrix()
 
     /** ジェスチャーディテクター（タッチイベントからフリック、長押し、スクロール等のイベントに変換） */
     private lateinit var mGestureDetector: GestureDetectorCompat
@@ -42,6 +42,8 @@ open class SosotataImageView
 
     /** フリック操作時の慣性スクロールを制御するタスクのインスタンス */
     private val mFlingTask: FlingTask = FlingTask()
+
+    protected var isScrolling = false
 
     /**
      * フリック操作時の慣性スクロールを制御するタスク
@@ -290,6 +292,7 @@ open class SosotataImageView
             // ・ACTION_UP：スクロールや拡大縮小の完了時
             // ・ACTION_CANCEL：２本指で操作中に３本指を追加するとACTION_CANCEL発生後にタッチイベントが止まる
             mFlingTask.fling(0F,0F, false)
+            isScrolling = false
         }
 
         return true
@@ -327,6 +330,7 @@ open class SosotataImageView
      * [android.view.GestureDetector.OnGestureListener.onScroll]
      */
     override fun onScroll(e1: MotionEvent?, e2: MotionEvent?, distanceX: Float, distanceY: Float): Boolean {
+        isScrolling = true
         var dx: Float = -distanceX
         var dy: Float = -distanceY
 

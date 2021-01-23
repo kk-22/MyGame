@@ -1,27 +1,45 @@
 package jp.co.my.mysen
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
+import android.graphics.*
 import android.util.AttributeSet
+import android.view.MotionEvent
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
 
+    private lateinit var listener: Listener
     private lateinit var balance: SEGameBalance
     private lateinit var lands: List<SELand>
 
     private lateinit var sourceBitmap: Bitmap
     private lateinit var renderCanvas: Canvas
 
-    fun initialize(balance: SEGameBalance, lands: List<SELand>) {
-        this.balance = balance
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(e: MotionEvent): Boolean {
+        if (e.action == MotionEvent.ACTION_UP && !isScrolling) {
+            val values = FloatArray(9)
+            this.mRenderMatrix.getValues(values)
+            val widthAndHeight = LAND_WIDTH_AND_HEIGHT + LAND_MARGIN
+            val x = ((e.x - values[Matrix.MTRANS_X]) / values[Matrix.MSCALE_X] / widthAndHeight)
+            val y = ((e.y - values[Matrix.MTRANS_Y]) / values[Matrix.MSCALE_Y] / widthAndHeight)
+            if (0 <= x && 0 <= y) { // -0.1をtoInt()すると0になるため、キャスト前に負数か確認する
+                getLand(x.toInt(), y.toInt())?.also { listener.onClickLand(it) }
+            }
+        }
+        return super.onTouchEvent(e)
+    }
 
-        val width = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
-        val height = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfY + LAND_MARGIN * (balance.fieldNumberOfY + 1)
+    fun initialize(balance: SEGameBalance, lands: List<SELand>, listener: Listener) {
+        this.balance = balance
+        this.listener = listener
+
+        val width =
+            LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
+        val height =
+            LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfY + LAND_MARGIN * (balance.fieldNumberOfY + 1)
         sourceBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         renderCanvas = Canvas(this.sourceBitmap)
         this.lands = lands
@@ -36,7 +54,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     private fun drawLand(x: Int, y: Int) {
-        drawLand(getLand(x, y))
+        getLand(x, y)?.also { drawLand(it) }
     }
 
     private fun drawLand(land: SELand) {
@@ -54,8 +72,12 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         }
     }
 
-    private fun getLand(x: Int, y: Int) : SELand {
-        return lands[x + y * balance.fieldNumberOfX]
+    private fun getLand(x: Int, y: Int): SELand? {
+        val index = x + y * balance.fieldNumberOfX
+        if (index < 0 || lands.size <= index) {
+            return null
+        }
+        return lands[index]
     }
 
     fun moveUnit(unit: SEUnit, toLand: SELand) {
@@ -72,5 +94,9 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         const val UNIT_WIDTH: Int = 25
         const val UNIT_HEIGHT: Int = 20
         private const val LAND_MARGIN: Int = 1
+    }
+
+    interface Listener {
+        fun onClickLand(land: SELand)
     }
 }
