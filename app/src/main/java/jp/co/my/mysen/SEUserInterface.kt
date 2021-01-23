@@ -14,7 +14,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     fun changePhaseByPlayer() {
         val nextPhase = when (phase) {
             is Phase.FreeOrder -> Phase.Advance
-            is Phase.SelectDestination -> return
+            is Phase.SelectDestination -> Phase.FreeOrder
             is Phase.Advance -> Phase.Pause
             is Phase.Pause -> Phase.Advance
         }
@@ -27,6 +27,10 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         phase = nextPhase
         when (prevPhase) {
             is Phase.SelectDestination -> {
+                if (prevPhase.units.first().destinationLand == null) {
+                    // 出撃をキャンセル
+                    fieldView.enterUnits(prevPhase.units)
+                }
             }
             is Phase.Advance -> timer.cancel()
             is Phase.FreeOrder, is Phase.Pause -> {
@@ -56,7 +60,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     fun changeButtonTitle() : String {
         return when (phase) {
             is Phase.FreeOrder -> "進行"
-            is Phase.SelectDestination -> "-"
+            is Phase.SelectDestination -> "中止"
             is Phase.Advance -> "停止"
             is Phase.Pause -> "再開"
         }
@@ -82,7 +86,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                     return
                 }
                 if (land.units.isEmpty()) {
-                    val unit = SEUnit()
+                    val unit = SEUnit(land)
                     fieldView.moveUnit(unit, land)
                     setPhase(Phase.SelectDestination(arrayListOf(unit)))
                 }
