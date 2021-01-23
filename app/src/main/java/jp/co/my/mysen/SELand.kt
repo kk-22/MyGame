@@ -2,12 +2,14 @@ package jp.co.my.mysen
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import jp.co.my.mygame.R
+import jp.co.my.mygame.createBitmap
 
 class SELand(val type: Type,
              val x: Int,
              val y: Int) {
+
+    val units: MutableList<SEUnit> = mutableListOf()
 
     enum class Type(val title: String, val imageId: Int) {
         Highway("道", R.drawable.se_land_highway),
@@ -15,23 +17,15 @@ class SELand(val type: Type,
         Fort("砦", R.drawable.se_land_fort),
         ;
 
-        fun getImage(context: Context) : Bitmap {
-            return image(context, this)
-        }
-
         companion object {
             private var images: MutableMap<String, Bitmap> = mutableMapOf()
             fun image(context: Context, type: Type) : Bitmap {
                 images[type.title]?.also { return it }
-                val baseImage = BitmapFactory.decodeResource(context.resources, type.imageId)
-                val scaledImage = Bitmap.createScaledBitmap(
-                    baseImage,
+                images[type.title] = type.imageId.createBitmap(
                     SEFieldView.LAND_WIDTH_AND_HEIGHT,
                     SEFieldView.LAND_WIDTH_AND_HEIGHT,
-                    true
-                )
-                images[type.title] = scaledImage
-                return scaledImage
+                    context)
+                return images[type.title]!!
             }
         }
     }

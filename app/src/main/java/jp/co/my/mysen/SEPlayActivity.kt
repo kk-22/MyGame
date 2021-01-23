@@ -33,6 +33,8 @@ class SEPlayActivity : AppCompatActivity() {
             SELand(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
         }
         fieldView.initialize(balance, lands)
+
+        fieldView.moveUnit(SEUnit(), lands[3])
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
