@@ -23,14 +23,18 @@ class SEPlayActivity : AppCompatActivity() {
         balance = SEGameBalance()
         binding.dayProgressbar.max = balance.interfaceMaxDay
 
-        userInterface = SEUserInterface(balance, object: SEUserInterface.UserInterfaceListener {
-            override fun didChangePhase(prevPhase: SEUserInterface.Phase, nextPhase: SEUserInterface.Phase) {
+        userInterface = SEUserInterface(balance, object : SEUserInterface.Listener {
+            override fun onChangePhase(
+                prevPhase: SEUserInterface.Phase,
+                nextPhase: SEUserInterface.Phase
+            ) {
                 binding.phaseButton.text = userInterface.changeButtonTitle()
                 if (prevPhase == SEUserInterface.Phase.Order) {
                     binding.dayProgressbar.progress = 0
                 }
             }
-            override fun didChangeDay(day: Int) {
+
+            override fun onChangeDay(day: Int) {
                 binding.dayProgressbar.progress = day
             }
         })

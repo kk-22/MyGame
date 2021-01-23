@@ -4,18 +4,20 @@ import android.os.Handler
 import android.util.Log
 import java.util.*
 
-class SEUserInterface(private val balance: SEGameBalance, private val listener: UserInterfaceListener) {
+class SEUserInterface(private val balance: SEGameBalance, private val listener: Listener) {
     private var phase = Phase.Order
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
 
     fun changePhaseByPlayer() {
-        setPhase(when (phase) {
-            Phase.Order -> Phase.Advance
-            Phase.Advance -> Phase.Pause
-            Phase.Pause -> Phase.Advance
-        })
+        setPhase(
+            when (phase) {
+                Phase.Order -> Phase.Advance
+                Phase.Advance -> Phase.Pause
+                Phase.Pause -> Phase.Advance
+            }
+        )
     }
 
     private fun setPhase(nextPhase: Phase) {
@@ -34,7 +36,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                 }
             }, balance.interfaceIntervalSec * 1000, balance.interfaceIntervalSec * 1000)
         }
-        listener.didChangePhase(prevPhase, nextPhase)
+        listener.onChangePhase(prevPhase, nextPhase)
     }
 
     fun changeButtonTitle() : String {
@@ -49,7 +51,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         Log.d("tag", "elapse day $day")
         day++
         if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
-            listener.didChangeDay(day)
+            listener.onChangeDay(day)
             return
         }
 
@@ -63,8 +65,8 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         Pause; // 一時停止
     }
 
-    interface UserInterfaceListener {
-        fun didChangePhase(prevPhase: Phase, nextPhase: Phase)
-        fun didChangeDay(day: Int)
+    interface Listener {
+        fun onChangePhase(prevPhase: Phase, nextPhase: Phase)
+        fun onChangeDay(day: Int)
     }
 }
