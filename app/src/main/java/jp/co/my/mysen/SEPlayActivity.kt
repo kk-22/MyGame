@@ -12,6 +12,7 @@ import jp.co.my.mysen.SELand.Type
 class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
     private lateinit var balance: SEGameBalance
+    private lateinit var userInterface: SEUserInterface
     private lateinit var fieldView: SEFieldView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,6 +21,14 @@ class SEPlayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         balance = SEGameBalance()
+        userInterface = SEUserInterface(balance, object: SEUserInterface.UserInterfaceListener {
+            override fun didChangePhase(phase: SEUserInterface.Phase) {
+                binding.phaseButton.text = userInterface.changeButtonTitle()
+            }
+            override fun didChangeDay(remainingDay: Int) {
+
+            }
+        })
         fieldView = binding.fieldView
 
         val mockTypes = arrayOf(
@@ -34,7 +43,10 @@ class SEPlayActivity : AppCompatActivity() {
         }
         fieldView.initialize(balance, lands)
 
-        fieldView.moveUnit(SEUnit(), lands[3])
+        binding.phaseButton.text = userInterface.changeButtonTitle()
+        binding.phaseButton.setOnClickListener {
+            userInterface.changePhaseByPlayer()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
