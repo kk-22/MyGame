@@ -5,46 +5,60 @@ import android.util.Log
 import java.util.*
 
 class SEUserInterface(private val balance: SEGameBalance, private val listener: Listener) {
-    private var phase = Phase.Order
+    private var phase: Phase = Phase.FreeOrder
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
     private lateinit var fieldView: SEFieldView
 
     fun changePhaseByPlayer() {
-        setPhase(
-            when (phase) {
-                Phase.Order -> Phase.Advance
-                Phase.Advance -> Phase.Pause
-                Phase.Pause -> Phase.Advance
-            }
-        )
+        val nextPhase = when (phase) {
+            is Phase.FreeOrder -> Phase.Advance
+            is Phase.SelectDestination -> return
+            is Phase.Advance -> Phase.Pause
+            is Phase.Pause -> Phase.Advance
+        }
+        setPhase(nextPhase)
     }
 
     private fun setPhase(nextPhase: Phase) {
         Log.d("tag", "setPhase $nextPhase")
         val prevPhase = phase
         phase = nextPhase
-        timer.cancel()
-        if (nextPhase == Phase.Advance) {
-            if (prevPhase == Phase.Order) {
-                day = 0
+        when (prevPhase) {
+            is Phase.SelectDestination -> {
             }
-            timer = Timer()
-            timer.schedule(object : TimerTask() {
-                override fun run() {
-                    mainHandler.post { elapseDay() }
+            is Phase.Advance -> timer.cancel()
+            is Phase.FreeOrder, is Phase.Pause -> {
+            }
+        }
+
+        when (nextPhase) {
+            is Phase.SelectDestination -> {
+            }
+            is Phase.Advance -> {
+                if (prevPhase is Phase.FreeOrder) {
+                    day = 0
                 }
-            }, balance.interfaceIntervalSec * 1000, balance.interfaceIntervalSec * 1000)
+                timer = Timer()
+                timer.schedule(object : TimerTask() {
+                    override fun run() {
+                        mainHandler.post { elapseDay() }
+                    }
+                }, balance.interfaceIntervalSec * 1000, balance.interfaceIntervalSec * 1000)
+            }
+            is Phase.FreeOrder, is Phase.Pause -> {
+            }
         }
         listener.onChangePhase(prevPhase, nextPhase)
     }
 
     fun changeButtonTitle() : String {
         return when (phase) {
-            Phase.Order -> "進行"
-            Phase.Advance -> "停止"
-            Phase.Pause -> "再開"
+            is Phase.FreeOrder -> "進行"
+            is Phase.SelectDestination -> "-"
+            is Phase.Advance -> "停止"
+            is Phase.Pause -> "再開"
         }
     }
 
@@ -57,37 +71,37 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         }
 
         timer.cancel()
-        setPhase(Phase.Order)
+        setPhase(Phase.FreeOrder)
     }
 
     fun setField(fieldView: SEFieldView) {
         this.fieldView = fieldView
         fieldView.listener = object : SEFieldView.Listener {
             override fun onClickLand(land: SELand) {
-                if (phase != Phase.Order) {
+                if (phase != Phase.FreeOrder) {
                     return
                 }
                 if (land.units.isEmpty()) {
                     val unit = SEUnit()
                     fieldView.moveUnit(unit, land)
-                    startSelectDestination(unit)
+                    setPhase(Phase.SelectDestination(arrayListOf(unit)))
                 }
             }
         }
     }
 
-    private fun startSelectDestination(unit: SEUnit) {
-
-    }
-
-    enum class Phase {
-        Order, // 命令フェーズ
-        Advance, // 進行フェーズ
-        Pause; // 一時停止
-    }
-
     interface Listener {
         fun onChangePhase(prevPhase: Phase, nextPhase: Phase)
         fun onChangeDay(day: Int)
+    }
+
+    sealed class Phase {
+        // 命令フェーズ
+        object FreeOrder : Phase()
+        data class SelectDestination(val units: List<SEUnit>) : Phase() // 目標選択
+
+        // 進行フェーズ
+        object Advance : Phase()
+        object Pause : Phase() // 一時停止
     }
 }

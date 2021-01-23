@@ -29,7 +29,7 @@ class SEPlayActivity : AppCompatActivity() {
                 nextPhase: SEUserInterface.Phase
             ) {
                 binding.phaseButton.text = userInterface.changeButtonTitle()
-                if (prevPhase == SEUserInterface.Phase.Order) {
+                if (prevPhase is SEUserInterface.Phase.FreeOrder) {
                     binding.dayProgressbar.progress = 0
                 }
             }
