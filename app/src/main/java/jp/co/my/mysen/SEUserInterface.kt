@@ -57,7 +57,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         setPhase(Phase.Order)
     }
 
-    enum class Phase() {
+    enum class Phase {
         Order, // 命令フェーズ
         Advance, // 進行フェーズ
         Pause; // 一時停止
