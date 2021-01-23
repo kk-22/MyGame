@@ -80,11 +80,17 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     fun moveUnit(unit: SEUnit, toLand: SELand) {
-        unit.currentLand?.also {
-            it.units.remove(unit)
-            drawLand(it)
-        }
+        unit.currentLand.units.remove(unit)
+        drawLand(unit.currentLand)
+
         toLand.units.add(unit)
+        drawLand(toLand)
+    }
+
+    // 入城・帰還
+    fun enterUnits(units: List<SEUnit>) {
+        val toLand = units.first().currentLand
+        toLand.units.removeAll(units)
         drawLand(toLand)
     }
 
