@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val pref = PreferenceManager.getDefaultSharedPreferences(this)
-        pref.getString("PrevActivity", "")?.let {
+        pref.getString("PrevActivity", "")?.also {
             try {
                 openActivity(Class.forName(it))
             } catch (e: Exception) {

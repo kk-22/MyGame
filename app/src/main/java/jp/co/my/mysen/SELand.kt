@@ -22,7 +22,7 @@ class SELand(val type: Type,
         companion object {
             private var images: MutableMap<String, Bitmap> = mutableMapOf()
             fun image(context: Context, type: Type) : Bitmap {
-                images[type.title]?.let { return it }
+                images[type.title]?.also { return it }
                 val baseImage = BitmapFactory.decodeResource(context.resources, type.imageId)
                 val scaledImage = Bitmap.createScaledBitmap(
                     baseImage,
