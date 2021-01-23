@@ -80,15 +80,26 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
 
     fun setField(fieldView: SEFieldView) {
         this.fieldView = fieldView
-        fieldView.listener = object : SEFieldView.Listener {
-            override fun onClickLand(land: SELand) {
-                if (phase != Phase.FreeOrder) {
-                    return
+        fieldView.listener = FieldViewListener()
+    }
+
+    private inner class FieldViewListener : SEFieldView.Listener {
+        override fun onClickLand(land: SELand) {
+            when (val p = phase) {
+                Phase.FreeOrder -> {
+                    if (land.units.isEmpty()) {
+                        val unit = SEUnit(land)
+                        fieldView.moveUnit(unit, land)
+                        setPhase(Phase.SelectDestination(arrayListOf(unit)))
+                    }
                 }
-                if (land.units.isEmpty()) {
-                    val unit = SEUnit(land)
-                    fieldView.moveUnit(unit, land)
-                    setPhase(Phase.SelectDestination(arrayListOf(unit)))
+                is Phase.SelectDestination -> {
+                    p.units.forEach { it.destinationLand = land }
+                    setPhase(Phase.FreeOrder)
+                }
+                Phase.Advance -> {
+                }
+                Phase.Pause -> {
                 }
             }
         }
