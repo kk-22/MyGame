@@ -7,6 +7,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ToggleButton
 import androidx.appcompat.app.AppCompatActivity
+import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SuPlayActivityBinding
 
@@ -60,6 +61,10 @@ class SUPlayActivity : AppCompatActivity() {
             }
             R.id.menu_clear -> {
                 clearCells()
+                true
+            }
+            R.id.menu_back -> {
+                MainActivity.backToMain(this)
                 true
             }
             else -> super.onOptionsItemSelected(item)

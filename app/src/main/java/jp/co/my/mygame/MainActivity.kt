@@ -1,5 +1,6 @@
 package jp.co.my.mygame
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -42,5 +43,18 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(applicationContext, cls)
             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
+    }
+
+    companion object {
+        fun backToMain(context: Context) {
+            PreferenceManager.getDefaultSharedPreferences(context)
+                .edit()
+                .remove("PrevActivity")
+                .apply()
+
+            val intent = Intent(context, MainActivity::class.java)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
+        }
     }
 }
