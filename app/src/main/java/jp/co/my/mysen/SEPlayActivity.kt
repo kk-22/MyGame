@@ -50,11 +50,8 @@ class SEPlayActivity : AppCompatActivity() {
         val lands = mockTypes.mapIndexed { index, type ->
             SELand(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
         }
-        fieldView.initialize(balance, lands, object : SEFieldView.Listener {
-            override fun onClickLand(land: SELand) {
-                fieldView.moveUnit(SEUnit(), land)
-            }
-        })
+        fieldView.initialize(balance, lands)
+        userInterface.setField(fieldView)
 
         binding.phaseButton.text = userInterface.changeButtonTitle()
         binding.phaseButton.setOnClickListener {

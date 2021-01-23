@@ -9,6 +9,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
+    private lateinit var fieldView: SEFieldView
 
     fun changePhaseByPlayer() {
         setPhase(
@@ -57,6 +58,26 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
 
         timer.cancel()
         setPhase(Phase.Order)
+    }
+
+    fun setField(fieldView: SEFieldView) {
+        this.fieldView = fieldView
+        fieldView.listener = object : SEFieldView.Listener {
+            override fun onClickLand(land: SELand) {
+                if (phase != Phase.Order) {
+                    return
+                }
+                if (land.units.isEmpty()) {
+                    val unit = SEUnit()
+                    fieldView.moveUnit(unit, land)
+                    startSelectDestination(unit)
+                }
+            }
+        }
+    }
+
+    private fun startSelectDestination(unit: SEUnit) {
+
     }
 
     enum class Phase {

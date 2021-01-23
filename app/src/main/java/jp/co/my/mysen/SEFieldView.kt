@@ -10,7 +10,7 @@ import jp.co.my.mygame.createBitmap
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
 
-    private lateinit var listener: Listener
+    lateinit var listener: Listener
     private lateinit var balance: SEGameBalance
     private lateinit var lands: List<SELand>
 
@@ -32,9 +32,8 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         return super.onTouchEvent(e)
     }
 
-    fun initialize(balance: SEGameBalance, lands: List<SELand>, listener: Listener) {
+    fun initialize(balance: SEGameBalance, lands: List<SELand>) {
         this.balance = balance
-        this.listener = listener
 
         val width =
             LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
