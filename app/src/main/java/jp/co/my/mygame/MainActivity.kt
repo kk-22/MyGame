@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             .apply()
 
         val intent = Intent(applicationContext, cls)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NO_ANIMATION)
         startActivity(intent)
     }
 
