@@ -21,12 +21,17 @@ class SEPlayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         balance = SEGameBalance()
-        userInterface = SEUserInterface(balance, object: SEUserInterface.UserInterfaceListener {
-            override fun didChangePhase(phase: SEUserInterface.Phase) {
-                binding.phaseButton.text = userInterface.changeButtonTitle()
-            }
-            override fun didChangeDay(remainingDay: Int) {
+        binding.dayProgressbar.max = balance.interfaceMaxDay
 
+        userInterface = SEUserInterface(balance, object: SEUserInterface.UserInterfaceListener {
+            override fun didChangePhase(prevPhase: SEUserInterface.Phase, nextPhase: SEUserInterface.Phase) {
+                binding.phaseButton.text = userInterface.changeButtonTitle()
+                if (prevPhase == SEUserInterface.Phase.Order) {
+                    binding.dayProgressbar.progress = 0
+                }
+            }
+            override fun didChangeDay(day: Int) {
+                binding.dayProgressbar.progress = day
             }
         })
         fieldView = binding.fieldView
