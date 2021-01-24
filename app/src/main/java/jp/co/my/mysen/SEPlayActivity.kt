@@ -42,8 +42,8 @@ class SEPlayActivity : AppCompatActivity() {
 
         val mockTypes = arrayOf(
             Type.Grass, Type.Grass, Type.Fort, Type.Highway, Type.Grass,
-            Type.Grass, Type.Grass, Type.Grass, Type.Highway, Type.Grass,
-            Type.Grass, Type.Grass, Type.Grass, Type.Highway, Type.Grass,
+            Type.Grass, Type.Mountain, Type.Grass, Type.Highway, Type.Grass,
+            Type.Grass, Type.Mountain, Type.Grass, Type.Highway, Type.Grass,
             Type.Grass, Type.Grass, Type.Highway, Type.Highway, Type.Grass,
             Type.Grass, Type.Grass, Type.Fort, Type.Grass, Type.Grass,
         )
