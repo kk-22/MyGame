@@ -1,13 +1,17 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.controller
 
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import jp.co.my.mygame.databinding.SePlayActivityBinding
+import jp.co.my.mysen.model.*
+import jp.co.my.mysen.view.SEFieldView
+import jp.co.my.mysen.view.SESpeedChanger
 import java.util.*
 
 class SEUserInterface(private val balance: SEGameBalance,
-                      private val binding: SePlayActivityBinding) {
+                      private val binding: SePlayActivityBinding
+) {
     private var phase: Phase = Phase.FreeOrder
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()

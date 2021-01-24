@@ -1,4 +1,4 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -7,6 +7,9 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
+import jp.co.my.mysen.model.SEGameBalance
+import jp.co.my.mysen.model.SELand
+import jp.co.my.mysen.model.SEUnit
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
     // 外部参照

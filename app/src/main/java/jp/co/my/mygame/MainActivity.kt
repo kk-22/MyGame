@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import jp.co.my.mygame.databinding.ActivityMainBinding
-import jp.co.my.mysen.SEPlayActivity
+import jp.co.my.mysen.controller.SEPlayActivity
 import jp.co.my.sudoku.SUPlayActivity
 
 class MainActivity : AppCompatActivity() {

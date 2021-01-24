@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name="jp.co.my.mysen.SEPlayActivity"
+            android:name="jp.co.my.mysen.controller.SEPlayActivity"
             android:screenOrientation="portrait"/>
 
         <activity
