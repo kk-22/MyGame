@@ -73,6 +73,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         day++
         if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
             listener.onChangeDay(day)
+            fieldView.moveAllUnit()
             return
         }
 
@@ -91,13 +92,13 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
             when (val p = phase) {
                 Phase.FreeOrder -> {
                     if (land.units.isEmpty()) {
-                        val unit = SEUnit(land)
+                        val unit = SEUnit(SEGeneral(), land)
                         fieldView.moveUnit(unit, land)
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))
                     } else {
                         setPhase(Phase.SelectDestination(land.units))
-                        fieldView.highlightLands(land.units.first().route!!.lands)
+                        fieldView.highlightLands(land.units.first().remainingRouteLands()!!)
                     }
                 }
                 is Phase.SelectDestination -> {

@@ -15,6 +15,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
     // 情報
     private lateinit var lands: List<SELand>
+    private var allUnits: MutableList<SEUnit> = mutableListOf()
     private var highlightedLands: MutableList<SELand> = mutableListOf()
 
     // 描画
@@ -113,10 +114,15 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     fun moveUnit(unit: SEUnit, toLand: SELand) {
-        unit.currentLand.units.remove(unit)
-        drawLand(unit.currentLand)
-
+        if (unit.currentLand == toLand) {
+            // 新たに出撃したユニットを登録
+            allUnits.add(unit)
+        } else {
+            unit.currentLand.units.remove(unit)
+            drawLand(unit.currentLand)
+        }
         toLand.units.add(unit)
+        unit.currentLand = toLand
         drawLand(toLand)
     }
 
@@ -124,7 +130,20 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     fun enterUnits(units: List<SEUnit>) {
         val toLand = units.first().currentLand
         toLand.units.removeAll(units)
+        allUnits.removeAll(units)
         drawLand(toLand)
+    }
+
+    fun moveAllUnit() {
+        allUnits.forEach { unit ->
+            unit.stackedMovingPower += unit.general.movingPower
+            unit.nextLand()
+                ?.takeIf { it.canEnter(unit) }
+                ?.also {
+                    unit.stackedMovingPower = 0
+                    moveUnit(unit, it)
+                }
+        }
     }
 
     companion object {
