@@ -24,8 +24,8 @@ class SEUnit(
 
     fun remainingRouteLands(): List<SELand>? {
         route?.also {
-            val nextIndex = it.lands.indexOf(currentLand) + 1
-            return it.lands.subList(nextIndex, it.lands.size)
+            val currentIndex = it.lands.indexOf(currentLand)
+            return it.lands.subList(currentIndex, it.lands.size)
         }
         return null
     }
