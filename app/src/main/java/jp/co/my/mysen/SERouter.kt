@@ -18,8 +18,8 @@ class SERouter(
     }
 
     private fun search(currentRoute: Route, nextLand: SELand) {
-        val cost = nextLand.movingCost(unit)
-        if (cost <= 0) {
+        val cost = if (unit.currentLand == nextLand) 0 else nextLand.movingCost(unit)
+        if (cost < 0) {
             return
         }
 
