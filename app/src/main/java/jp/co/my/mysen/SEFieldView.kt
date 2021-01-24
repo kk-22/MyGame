@@ -9,11 +9,15 @@ import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
-
+    // 外部参照
     lateinit var listener: Listener
     private lateinit var balance: SEGameBalance
-    private lateinit var lands: List<SELand>
 
+    // 情報
+    private lateinit var lands: List<SELand>
+    private var highlightedLands: MutableList<SELand> = mutableListOf()
+
+    // 描画
     private lateinit var sourceBitmap: Bitmap
     private lateinit var renderCanvas: Canvas
 
@@ -45,7 +49,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
         // 塗りつぶし
         val paint = Paint()
-        paint.color = Color.BLACK
+        paint.color = BORDER_COLOR
         renderCanvas.drawRect(0.0f, 0.0f, width.toFloat(), height.toFloat(), paint)
         // 地形描画
         lands.forEach { drawLand(it) }
@@ -57,26 +61,55 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     private fun drawLand(land: SELand) {
-        val x = (LAND_WIDTH_AND_HEIGHT * land.x + LAND_MARGIN * (land.x + 1)).toFloat()
-        val y = (LAND_WIDTH_AND_HEIGHT * land.y + LAND_MARGIN * (land.y + 1)).toFloat()
-        renderCanvas.drawBitmap(SELand.Type.image(context, land.type), x, y, null)
+        renderCanvas.drawBitmap(
+            SELand.Type.image(context, land.type),
+            land.pointX,
+            land.pointY,
+            null
+        )
 
         if (land.units.isNotEmpty()) {
             renderCanvas.drawBitmap(
                 R.drawable.se_unit.createBitmap(UNIT_WIDTH, UNIT_HEIGHT, context),
-                x + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
-                y + (LAND_WIDTH_AND_HEIGHT - UNIT_HEIGHT) / 2,
+                land.pointX + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
+                land.pointY + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
                 null
             )
         }
     }
 
-    private fun getLand(x: Int, y: Int): SELand? {
-        val index = x + y * balance.fieldNumberOfX
-        if (index < 0 || lands.size <= index) {
+    private fun drawHighlight(land: SELand, isHighlight: Boolean) {
+        val width = LAND_MARGIN.toFloat()
+        val paint = Paint().apply {
+            color = if (isHighlight) Color.argb(255, 255, 0, 0) else BORDER_COLOR
+            strokeWidth = width
+            style = Paint.Style.STROKE
+        }
+
+        val x = land.pointX - width
+        val y = land.pointY - width
+        renderCanvas.drawRect(
+            x, y,
+            x + LAND_WIDTH_AND_HEIGHT.toFloat() + width * 2 - 1,
+            y + LAND_WIDTH_AND_HEIGHT.toFloat() + width * 2 - 1, paint
+        )
+    }
+
+    fun highlightLands(lands: List<SELand>) {
+        lands.forEach { drawHighlight(it, true) }
+        highlightedLands.addAll(lands)
+    }
+
+    fun clearHighlight() {
+        highlightedLands.forEach { drawHighlight(it, false) }
+        highlightedLands.clear()
+    }
+
+    fun getLand(x: Int, y: Int): SELand? {
+        if (x < 0 || balance.fieldNumberOfX <= x || y < 0 || balance.fieldNumberOfY <= y) {
             return null
         }
-        return lands[index]
+        return lands[x + y * balance.fieldNumberOfX]
     }
 
     fun moveUnit(unit: SEUnit, toLand: SELand) {
@@ -98,7 +131,8 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         const val LAND_WIDTH_AND_HEIGHT: Int = 50
         const val UNIT_WIDTH: Int = 25
         const val UNIT_HEIGHT: Int = 20
-        private const val LAND_MARGIN: Int = 1
+        const val LAND_MARGIN: Int = 1
+        private const val BORDER_COLOR: Int = Color.BLACK
     }
 
     interface Listener {

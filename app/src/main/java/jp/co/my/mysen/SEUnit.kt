@@ -5,4 +5,5 @@ class SEUnit(
 ) {
     var currentLand: SELand = startingLand // 現在地
     var destinationLand: SELand? = null // 目標地点
+    var route: SERouter.Route? = null // 目標地点へのルート
 }

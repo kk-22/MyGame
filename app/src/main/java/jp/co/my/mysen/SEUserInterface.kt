@@ -2,6 +2,7 @@ package jp.co.my.mysen
 
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import java.util.*
 
 class SEUserInterface(private val balance: SEGameBalance, private val listener: Listener) {
@@ -23,6 +24,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
 
     private fun setPhase(nextPhase: Phase) {
         Log.d("tag", "setPhase $nextPhase")
+        fieldView.clearHighlight()
         val prevPhase = phase
         phase = nextPhase
         when (prevPhase) {
@@ -60,7 +62,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
     fun changeButtonTitle() : String {
         return when (phase) {
             is Phase.FreeOrder -> "進行"
-            is Phase.SelectDestination -> "中止"
+            is Phase.SelectDestination -> "戻る"
             is Phase.Advance -> "停止"
             is Phase.Pause -> "再開"
         }
@@ -85,17 +87,35 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
 
     private inner class FieldViewListener : SEFieldView.Listener {
         override fun onClickLand(land: SELand) {
+            fieldView.clearHighlight()
             when (val p = phase) {
                 Phase.FreeOrder -> {
                     if (land.units.isEmpty()) {
                         val unit = SEUnit(land)
                         fieldView.moveUnit(unit, land)
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
+                        fieldView.highlightLands(listOf(land))
+                    } else {
+                        setPhase(Phase.SelectDestination(land.units))
+                        fieldView.highlightLands(land.units.first().route!!.lands)
                     }
                 }
                 is Phase.SelectDestination -> {
-                    p.units.forEach { it.destinationLand = land }
-                    setPhase(Phase.FreeOrder)
+                    if (p.units.first().destinationLand == land) {
+                        // 2回目のタップで目標地点設定完了
+                        setPhase(Phase.FreeOrder)
+                    } else {
+                        // 1回目のタップはルート表示のみ
+                        p.units.forEach { unit ->
+                            SERouter(unit, land, fieldView).getBestRoute()?.also {
+                                unit.route = it
+                                unit.destinationLand = land
+                                fieldView.highlightLands(it.lands)
+                            } ?: run {
+                                Toast.makeText(fieldView.context, "移動不可", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
                 }
                 Phase.Advance -> {
                 }
