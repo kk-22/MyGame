@@ -108,7 +108,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                     } else {
                         // 1回目のタップはルート表示のみ
                         p.units.forEach { unit ->
-                            SERouter(unit, land, fieldView).getBestRoute()?.also {
+                            SERouter(unit, land, fieldView).bestRoute?.also {
                                 unit.route = it
                                 unit.destinationLand = land
                                 fieldView.highlightLands(it.lands)
