@@ -19,6 +19,14 @@ class SELand(val type: Type,
         return type.basicCost
     }
 
+    // この地形にユニットが進入可能ならtrueを返す
+    fun canEnter(unit: SEUnit): Boolean {
+        if (unit.stackedMovingPower < movingCost(unit)) {
+            return false // 移動力不足
+        }
+        return true
+    }
+
     enum class Type(val title: String, val basicCost: Int, val imageId: Int) {
         Highway("道", 10, R.drawable.se_land_highway),
         Grass("草原", 30, R.drawable.se_land_grass),
