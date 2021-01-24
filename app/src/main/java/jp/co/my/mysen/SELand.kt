@@ -30,6 +30,7 @@ class SELand(val type: Type,
     enum class Type(val title: String, val basicCost: Int, val imageId: Int) {
         Highway("道", 10, R.drawable.se_land_highway),
         Grass("草原", 30, R.drawable.se_land_grass),
+        Mountain("山", -1, R.drawable.se_land_mountain),
         Fort("砦", 50, R.drawable.se_land_fort),
         ;
 
