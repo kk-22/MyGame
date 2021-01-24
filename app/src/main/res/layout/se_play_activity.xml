@@ -6,21 +6,33 @@
     android:layout_height="match_parent"
     tools:context="jp.co.my.sudoku.SUPlayActivity">
 
-    <ProgressBar
-        android:id="@+id/day_progressbar"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="100dp"
-        android:layout_height="10dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:indeterminate="false"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <jp.co.my.mysen.SEFieldView
         android:id="@+id/field_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/day_progressbar"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginTop="8dp"
+        android:indeterminate="false"
+        app:layout_constraintEnd_toEndOf="@+id/speed_changer"
+        app:layout_constraintStart_toStartOf="@+id/speed_changer"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <jp.co.my.mysen.SESpeedChanger
+        android:id="@+id/speed_changer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/day_progressbar" />
 
     <Button
         android:id="@+id/phase_button"
