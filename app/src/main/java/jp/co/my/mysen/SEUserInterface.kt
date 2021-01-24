@@ -3,23 +3,32 @@ package jp.co.my.mysen
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import jp.co.my.mygame.databinding.SePlayActivityBinding
 import java.util.*
 
-class SEUserInterface(private val balance: SEGameBalance, private val listener: Listener) {
+class SEUserInterface(private val balance: SEGameBalance,
+                      private val binding: SePlayActivityBinding) {
     private var phase: Phase = Phase.FreeOrder
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
-    private lateinit var fieldView: SEFieldView
 
-    fun changePhaseByPlayer() {
-        val nextPhase = when (phase) {
-            is Phase.FreeOrder -> Phase.Advance
-            is Phase.SelectDestination -> Phase.FreeOrder
-            is Phase.Advance -> Phase.Pause
-            is Phase.Pause -> Phase.Advance
+    private var fieldView: SEFieldView = binding.fieldView
+
+    init {
+        fieldView.listener = FieldViewListener()
+
+        updatePhaseButton()
+        binding.dayProgressbar.max = balance.interfaceMaxDay
+        binding.phaseButton.setOnClickListener {
+            val nextPhase = when (phase) {
+                is Phase.FreeOrder -> Phase.Advance
+                is Phase.SelectDestination -> Phase.FreeOrder
+                is Phase.Advance -> Phase.Pause
+                is Phase.Pause -> Phase.Advance
+            }
+            setPhase(nextPhase)
         }
-        setPhase(nextPhase)
     }
 
     private fun setPhase(nextPhase: Phase) {
@@ -28,6 +37,9 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         val prevPhase = phase
         phase = nextPhase
         when (prevPhase) {
+            is Phase.FreeOrder -> {
+                binding.dayProgressbar.progress = 0
+            }
             is Phase.SelectDestination -> {
                 if (prevPhase.units.first().destinationLand == null) {
                     // 出撃をキャンセル
@@ -35,7 +47,7 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                 }
             }
             is Phase.Advance -> timer.cancel()
-            is Phase.FreeOrder, is Phase.Pause -> {
+            is Phase.Pause -> {
             }
         }
 
@@ -56,11 +68,11 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
             is Phase.FreeOrder, is Phase.Pause -> {
             }
         }
-        listener.onChangePhase(prevPhase, nextPhase)
+        updatePhaseButton()
     }
 
-    fun changeButtonTitle() : String {
-        return when (phase) {
+    private fun updatePhaseButton() {
+        binding.phaseButton.text = when (phase) {
             is Phase.FreeOrder -> "進行"
             is Phase.SelectDestination -> "戻る"
             is Phase.Advance -> "停止"
@@ -72,18 +84,13 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
         Log.d("tag", "elapse day $day")
         day++
         if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
-            listener.onChangeDay(day)
+            binding.dayProgressbar.progress = day
             fieldView.moveAllUnit()
             return
         }
 
         timer.cancel()
         setPhase(Phase.FreeOrder)
-    }
-
-    fun setField(fieldView: SEFieldView) {
-        this.fieldView = fieldView
-        fieldView.listener = FieldViewListener()
     }
 
     private inner class FieldViewListener : SEFieldView.Listener {
@@ -124,11 +131,6 @@ class SEUserInterface(private val balance: SEGameBalance, private val listener: 
                 }
             }
         }
-    }
-
-    interface Listener {
-        fun onChangePhase(prevPhase: Phase, nextPhase: Phase)
-        fun onChangeDay(day: Int)
     }
 
     sealed class Phase {
