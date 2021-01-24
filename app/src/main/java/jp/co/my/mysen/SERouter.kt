@@ -6,42 +6,45 @@ class SERouter(
     private val fieldView: SEFieldView
 ) {
 
-    private var crossedLands: MutableMap<SELand, Route> = mutableMapOf()
+    var bestRoute: Route?
 
     init {
-        val startingRoute = Route(arrayListOf(), 0)
-        search(startingRoute, unit.currentLand)
+        bestRoute = searchBestRoute()
     }
 
-    fun getBestRoute(): Route? {
-        return crossedLands[destinationLand]
-    }
+    private fun searchBestRoute(): Route? {
+        val firstRoute = Route(arrayListOf(unit.currentLand), 0)
+        if (destinationLand == unit.currentLand) return firstRoute
 
-    private fun search(currentRoute: Route, nextLand: SELand) {
-        val cost = if (unit.currentLand == nextLand) 0 else nextLand.movingCost(unit)
-        if (cost < 0) {
-            return
-        }
+        val remainingRoutes: MutableList<Route> = mutableListOf(firstRoute)
+        val searchedLands : MutableList<SELand> = mutableListOf(unit.currentLand)
+        while (remainingRoutes.isNotEmpty()) {
+            val prevRoute = remainingRoutes.first()
+            val prevLand = prevRoute.lands.last()
+            remainingRoutes.remove(prevRoute)
 
-        val newRoute = Route(currentRoute, nextLand, cost)
-        crossedLands[nextLand]?.takeIf { it.totalCost <= newRoute.totalCost }?.also {
-            // より短いコストで到達済み
-            return
-        }
+            // スマホは縦長なので上下移動のルートを優先
+            val plusX = arrayListOf(0, 0, 1, -1)
+            val plusY = arrayListOf(-1, 1, 0, 0)
+            for (i in 0..3) {
+                fieldView.getLand(prevLand.x + plusX[i], prevLand.y + plusY[i])?.also { nextLand ->
+                    if (searchedLands.contains(nextLand)) return@also // 戻るの阻止。既に最短ルートで検索済み
+                    val cost = nextLand.movingCost(unit)
+                    if (cost < 0) return@also
 
-        crossedLands[nextLand] = newRoute
-        if (nextLand == destinationLand) {
-            // 目標地点へ到達
-            return
-        }
-        // スマホは縦長なので上下移動のルートを優先
-        val plusX = arrayListOf(0, 0, 1, -1)
-        val plusY = arrayListOf(-1, 1, 0, 0)
-        for (i in 0..3) {
-            fieldView.getLand(nextLand.x + plusX[i], nextLand.y + plusY[i])?.also {
-                search(newRoute, it)
+                    val nextRoute = Route(prevRoute, nextLand, cost)
+                    if (nextLand == destinationLand) {
+                        // 目標地点へ到達
+                        return nextRoute
+                    }
+                    remainingRoutes.add(nextRoute)
+                    searchedLands.add(nextLand)
+                }
             }
+            // 最小コストのprevRouteを順次取り出せるようにソート
+            remainingRoutes.sortBy { it.totalCost }
         }
+        return null
     }
 
     // ルート探索の結果を格納
