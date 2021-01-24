@@ -57,10 +57,6 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         setImage(sourceBitmap)
     }
 
-    private fun drawLand(x: Int, y: Int) {
-        getLand(x, y)?.also { drawLand(it) }
-    }
-
     private fun drawLand(land: SELand) {
         renderCanvas.drawBitmap(
             SELand.Type.image(context, land.type),
