@@ -1,4 +1,4 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.view
 
 import android.content.Context
 import android.graphics.Color

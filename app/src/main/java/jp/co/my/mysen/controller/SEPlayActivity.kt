@@ -1,4 +1,4 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.controller
 
 import android.os.Bundle
 import android.view.Menu
@@ -7,7 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SePlayActivityBinding
-import jp.co.my.mysen.SELand.Type
+import jp.co.my.mysen.model.SEGameBalance
+import jp.co.my.mysen.model.SELand
 
 class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
@@ -23,11 +24,31 @@ class SEPlayActivity : AppCompatActivity() {
         userInterface = SEUserInterface(balance, binding)
 
         val mockTypes = arrayOf(
-            Type.Grass, Type.Grass, Type.Fort, Type.Highway, Type.Grass,
-            Type.Grass, Type.Mountain, Type.Grass, Type.Highway, Type.Grass,
-            Type.Grass, Type.Mountain, Type.Grass, Type.Highway, Type.Grass,
-            Type.Grass, Type.Grass, Type.Highway, Type.Highway, Type.Grass,
-            Type.Grass, Type.Grass, Type.Fort, Type.Grass, Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Fort,
+            SELand.Type.Highway,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Mountain,
+            SELand.Type.Grass,
+            SELand.Type.Highway,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Mountain,
+            SELand.Type.Grass,
+            SELand.Type.Highway,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Highway,
+            SELand.Type.Highway,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
+            SELand.Type.Fort,
+            SELand.Type.Grass,
+            SELand.Type.Grass,
         )
         val lands = mockTypes.mapIndexed { index, type ->
             SELand(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)

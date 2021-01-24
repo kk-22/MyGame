@@ -1,4 +1,4 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.view
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -21,7 +21,8 @@ import kotlin.math.abs
 open class SosotataImageView
 /**
  * コンストラクタ
- */(context: Context, attrs: AttributeSet) : View(context, attrs), GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
+ */(context: Context, attrs: AttributeSet) : View(context, attrs),
+    GestureDetector.OnGestureListener, ScaleGestureDetector.OnScaleGestureListener {
     /** 描画用ビットマップ（表示する画像をsetImageで設定する）*/
     private lateinit var mRenderBitmap: Bitmap
 

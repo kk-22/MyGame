@@ -1,4 +1,6 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.model
+
+import jp.co.my.mysen.view.SEFieldView
 
 class SERouter(
     private val unit: SEUnit,

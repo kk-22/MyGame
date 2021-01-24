@@ -1,9 +1,10 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.model
 
 import android.content.Context
 import android.graphics.Bitmap
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
+import jp.co.my.mysen.view.SEFieldView
 
 class SELand(val type: Type,
              val x: Int,

@@ -1,4 +1,4 @@
-package jp.co.my.mysen
+package jp.co.my.mysen.model
 
 class SEGeneral {
 
