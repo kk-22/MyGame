@@ -19,4 +19,8 @@
     <string name="title_sudoku">数独</string>
     <string name="title_mysen">MySen</string>
     <string name="menu_back">戻る</string>
+    <string name="speed1">×1</string>
+    <string name="speed2">×2</string>
+    <string name="speed3">×4</string>
+    <string name="speed4">×8</string>
 </resources>

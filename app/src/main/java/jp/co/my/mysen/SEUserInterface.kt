@@ -29,6 +29,11 @@ class SEUserInterface(private val balance: SEGameBalance,
             }
             setPhase(nextPhase)
         }
+        binding.speedChanger.listener = object : SESpeedChanger.Listener {
+            override fun onChangeSpeed() {
+                if (phase is Phase.Advance) resetTimer()
+            }
+        }
     }
 
     private fun setPhase(nextPhase: Phase) {
@@ -58,12 +63,7 @@ class SEUserInterface(private val balance: SEGameBalance,
                 if (prevPhase is Phase.FreeOrder) {
                     day = 0
                 }
-                timer = Timer()
-                timer.schedule(object : TimerTask() {
-                    override fun run() {
-                        mainHandler.post { elapseDay() }
-                    }
-                }, balance.interfaceIntervalSec * 1000, balance.interfaceIntervalSec * 1000)
+                resetTimer()
             }
             is Phase.FreeOrder, is Phase.Pause -> {
             }
@@ -80,8 +80,21 @@ class SEUserInterface(private val balance: SEGameBalance,
         }
     }
 
+    private fun resetTimer() {
+        val period = 1000 / binding.speedChanger.speedRatio()
+        timer.cancel()
+        timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                mainHandler.post { elapseDay() }
+            }
+        }, period, period)
+    }
+
     private fun elapseDay() {
         Log.d("tag", "elapse day $day")
+        if (phase !is Phase.Advance) throw IllegalArgumentException("Phase is not Advance")
+
         day++
         if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
             binding.dayProgressbar.progress = day
@@ -89,7 +102,6 @@ class SEUserInterface(private val balance: SEGameBalance,
             return
         }
 
-        timer.cancel()
         setPhase(Phase.FreeOrder)
     }
 
