@@ -13,7 +13,6 @@ class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
     private lateinit var balance: SEGameBalance
     private lateinit var userInterface: SEUserInterface
-    private lateinit var fieldView: SEFieldView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,24 +20,7 @@ class SEPlayActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         balance = SEGameBalance()
-        binding.dayProgressbar.max = balance.interfaceMaxDay
-
-        userInterface = SEUserInterface(balance, object : SEUserInterface.Listener {
-            override fun onChangePhase(
-                prevPhase: SEUserInterface.Phase,
-                nextPhase: SEUserInterface.Phase
-            ) {
-                binding.phaseButton.text = userInterface.changeButtonTitle()
-                if (prevPhase is SEUserInterface.Phase.FreeOrder) {
-                    binding.dayProgressbar.progress = 0
-                }
-            }
-
-            override fun onChangeDay(day: Int) {
-                binding.dayProgressbar.progress = day
-            }
-        })
-        fieldView = binding.fieldView
+        userInterface = SEUserInterface(balance, binding)
 
         val mockTypes = arrayOf(
             Type.Grass, Type.Grass, Type.Fort, Type.Highway, Type.Grass,
@@ -50,13 +32,7 @@ class SEPlayActivity : AppCompatActivity() {
         val lands = mockTypes.mapIndexed { index, type ->
             SELand(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
         }
-        fieldView.initialize(balance, lands)
-        userInterface.setField(fieldView)
-
-        binding.phaseButton.text = userInterface.changeButtonTitle()
-        binding.phaseButton.setOnClickListener {
-            userInterface.changePhaseByPlayer()
-        }
+        binding.fieldView.initialize(balance, lands)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
