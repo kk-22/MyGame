@@ -6,5 +6,5 @@ class SEGameBalance {
     val fieldNumberOfY = 5
     // インターフェース
     val interfaceIntervalSec: Long = 1
-    val interfaceMaxDay = 3
+    val interfaceMaxDay = 20
 }
