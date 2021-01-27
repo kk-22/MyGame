@@ -23,4 +23,5 @@
     <string name="speed2">×2</string>
     <string name="speed3">×4</string>
     <string name="speed4">×8</string>
+    <string name="menu_reset_realm">Realmリセット</string>
 </resources>
