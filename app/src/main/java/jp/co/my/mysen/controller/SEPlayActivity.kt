@@ -15,7 +15,7 @@ import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.model.SELand
 import jp.co.my.mysen.view_model.SEBaseRealmViewModel
-import jp.co.my.mysen.realm.SECountryBaseRealm
+import jp.co.my.mysen.realm.SECountryRealmObject
 
 class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
@@ -69,7 +69,7 @@ class SEPlayActivity : AppCompatActivity() {
     private fun loadRealm() {
         val realm = Realm.getDefaultInstance()
         realm.executeTransaction {
-            val countries = realm.where<SECountryBaseRealm>().findAll()
+            val countries = realm.where<SECountryRealmObject>().findAll()
             Log.d("tag", countries.toString())
         }
     }
