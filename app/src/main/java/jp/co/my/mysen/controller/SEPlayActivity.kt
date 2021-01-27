@@ -14,7 +14,7 @@ import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.model.SELand
-import jp.co.my.mysen.realm.SEBaseRealmViewModel
+import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 import jp.co.my.mysen.realm.SECountryBaseRealm
 
 class SEPlayActivity : AppCompatActivity() {
