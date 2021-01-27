@@ -6,7 +6,7 @@ import io.realm.annotations.Required
 
 open class SECountryRealmObject: RealmObject() {
     @PrimaryKey
-    var no: Int? = null
+    var id: Int? = null
 
     @Required
     var name: String = ""
