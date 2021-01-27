@@ -1,10 +1,11 @@
-package jp.co.my.mysen.realm
+package jp.co.my.mysen.view_model
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import io.realm.Realm
 import io.realm.kotlin.where
+import jp.co.my.mysen.realm.SECountryBaseRealm
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.Request
