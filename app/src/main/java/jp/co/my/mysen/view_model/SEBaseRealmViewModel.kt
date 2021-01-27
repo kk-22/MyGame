@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import io.realm.Realm
 import io.realm.kotlin.where
-import jp.co.my.mysen.realm.SECountryBaseRealm
+import jp.co.my.mysen.realm.SECountryRealmObject
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -22,10 +22,10 @@ class SEBaseRealmViewModel: ViewModel() {
             val response = httpGet("https://script.google.com/macros/s/AKfycbzVk_CvxzpIAxXhx5lroyDzayI6sV4TLoLiHYU-CgwbuHKbPTM/exec?sheet=country")
             response?.also {
                 val realm = Realm.getDefaultInstance()
-                realm.where<SECountryBaseRealm>().findAll().deleteAllFromRealm()
+                realm.where<SECountryRealmObject>().findAll().deleteAllFromRealm()
 
                 realm.executeTransaction {
-                    it.createAllFromJson(SECountryBaseRealm::class.java, response)
+                    it.createAllFromJson(SECountryRealmObject::class.java, response)
                 }
                 emit(true)
             } ?: run {
