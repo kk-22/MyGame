@@ -1,5 +1,6 @@
 package jp.co.my.mysen.model
 
+import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 
 class SERoute(
@@ -10,7 +11,7 @@ class SERoute(
             : this(prevSERoute.lands.plus(addingLand), prevSERoute.totalCost + addingCost)
 
     companion object {
-        fun bestRoute(unit: SEUnit,
+        fun bestRoute(unit: SEUnitRealmObject,
                       destinationLand: SELand,
                       fieldView: SEFieldView): SERoute? {
             val firstRoute = SERoute(arrayListOf(unit.currentLand), 0)

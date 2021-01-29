@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
+import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 
 class SELand(val type: Type,
@@ -14,14 +15,14 @@ class SELand(val type: Type,
         (SEFieldView.LAND_WIDTH_AND_HEIGHT * x + SEFieldView.LAND_MARGIN * (x + 1)).toFloat()
     val pointY =
         (SEFieldView.LAND_WIDTH_AND_HEIGHT * y + SEFieldView.LAND_MARGIN * (y + 1)).toFloat()
-    val units: MutableList<SEUnit> = mutableListOf()
+    val units: MutableList<SEUnitRealmObject> = mutableListOf()
 
-    fun movingCost(unit: SEUnit): Int {
+    fun movingCost(unit: SEUnitRealmObject): Int {
         return type.basicCost
     }
 
     // この地形にユニットが進入可能ならtrueを返す
-    fun canEnter(unit: SEUnit): Boolean {
+    fun canEnter(unit: SEUnitRealmObject): Boolean {
         if (unit.stackedMovingPower < movingCost(unit)) {
             return false // 移動力不足
         }
