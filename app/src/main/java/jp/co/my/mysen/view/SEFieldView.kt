@@ -117,8 +117,8 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
         } else {
-            unit.currentLand.units.remove(unit)
-            drawLand(unit.currentLand)
+            unit.currentLand!!.units.remove(unit)
+            drawLand(unit.currentLand!!)
         }
         toLand.units.add(unit)
         unit.currentLand = toLand
@@ -127,7 +127,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
     // 入城・帰還
     fun enterUnits(units: List<SEUnitRealmObject>) {
-        val toLand = units.first().currentLand
+        val toLand = units.first().currentLand!!
         toLand.units.removeAll(units)
         allUnits.removeAll(units)
         drawLand(toLand)
@@ -135,7 +135,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
     fun moveAllUnit() {
         allUnits.forEach { unit ->
-            unit.stackedMovingPower += unit.general.movingPower
+            unit.stackedMovingPower += unit.general!!.speed
             unit.nextLand()
                 ?.takeIf { it.canEnter(unit) }
                 ?.also {

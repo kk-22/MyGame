@@ -3,8 +3,11 @@ package jp.co.my.mysen.controller
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import io.realm.Realm
+import io.realm.kotlin.where
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.*
+import jp.co.my.mysen.realm.SEGeneralRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
@@ -116,7 +119,16 @@ class SEUserInterface(private val balance: SEGameBalance,
             when (val p = phase) {
                 Phase.FreeOrder -> {
                     if (land.units.isEmpty()) {
-                        val unit = SEUnitRealmObject(SEGeneral(), land)
+                        val unit = SEUnitRealmObject()
+                        unit.startingLand = land
+                        unit.currentLand = land
+
+                        val realm = Realm.getDefaultInstance()
+                        realm.executeTransaction {
+                            unit.general = realm.where<SEGeneralRealmObject>().findFirst()
+                            realm.copyToRealm(unit)
+                        }
+
                         fieldView.moveUnit(unit, land)
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))

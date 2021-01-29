@@ -14,11 +14,11 @@ class SERoute(
         fun bestRoute(unit: SEUnitRealmObject,
                       destinationLand: SELand,
                       fieldView: SEFieldView): SERoute? {
-            val firstRoute = SERoute(arrayListOf(unit.currentLand), 0)
+            val firstRoute = SERoute(arrayListOf(unit.currentLand!!), 0)
             if (destinationLand == unit.currentLand) return firstRoute
 
             val remainingSERoutes: MutableList<SERoute> = mutableListOf(firstRoute)
-            val searchedLands : MutableList<SELand> = mutableListOf(unit.currentLand)
+            val searchedLands : MutableList<SELand> = mutableListOf(unit.currentLand!!)
             while (remainingSERoutes.isNotEmpty()) {
                 val prevRoute = remainingSERoutes.first()
                 val prevLand = prevRoute.lands.last()
