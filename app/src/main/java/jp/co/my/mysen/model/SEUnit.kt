@@ -6,7 +6,7 @@ class SEUnit(
 ) {
     var currentLand: SELand = startingLand // 現在地
     var destinationLand: SELand? = null // 目標地点
-    var route: SERouter.Route? = null // 目標地点へのルート
+    var route: SERoute? = null // 目標地点へのルート
 
     var stackedMovingPower = 0 // Landに留まることで蓄積した移動力
 
