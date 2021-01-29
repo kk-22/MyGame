@@ -1,6 +1,10 @@
-package jp.co.my.mysen.model
+package jp.co.my.mysen.realm
 
-class SEUnit(
+import jp.co.my.mysen.model.SEGeneral
+import jp.co.my.mysen.model.SELand
+import jp.co.my.mysen.model.SERoute
+
+class SEUnitRealmObject(
     val general: SEGeneral,
     private val startingLand: SELand // 出発地点・所属拠点
 ) {

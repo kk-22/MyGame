@@ -9,7 +9,7 @@ import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.model.SELand
-import jp.co.my.mysen.model.SEUnit
+import jp.co.my.mysen.realm.SEUnitRealmObject
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
     // 外部参照
@@ -18,7 +18,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
     // 情報
     private lateinit var lands: List<SELand>
-    private var allUnits: MutableList<SEUnit> = mutableListOf()
+    private var allUnits: MutableList<SEUnitRealmObject> = mutableListOf()
     private var highlightedLands: MutableList<SELand> = mutableListOf()
 
     // 描画
@@ -112,7 +112,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         return lands[x + y * balance.fieldNumberOfX]
     }
 
-    fun moveUnit(unit: SEUnit, toLand: SELand) {
+    fun moveUnit(unit: SEUnitRealmObject, toLand: SELand) {
         if (unit.currentLand == toLand) {
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
@@ -126,7 +126,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     // 入城・帰還
-    fun enterUnits(units: List<SEUnit>) {
+    fun enterUnits(units: List<SEUnitRealmObject>) {
         val toLand = units.first().currentLand
         toLand.units.removeAll(units)
         allUnits.removeAll(units)

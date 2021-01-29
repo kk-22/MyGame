@@ -5,6 +5,7 @@ import android.util.Log
 import android.widget.Toast
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.*
+import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
 import java.util.*
@@ -115,7 +116,7 @@ class SEUserInterface(private val balance: SEGameBalance,
             when (val p = phase) {
                 Phase.FreeOrder -> {
                     if (land.units.isEmpty()) {
-                        val unit = SEUnit(SEGeneral(), land)
+                        val unit = SEUnitRealmObject(SEGeneral(), land)
                         fieldView.moveUnit(unit, land)
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))
@@ -152,7 +153,7 @@ class SEUserInterface(private val balance: SEGameBalance,
     sealed class Phase {
         // 命令フェーズ
         object FreeOrder : Phase()
-        data class SelectDestination(val units: List<SEUnit>) : Phase() // 目標選択
+        data class SelectDestination(val units: List<SEUnitRealmObject>) : Phase() // 目標選択
 
         // 進行フェーズ
         object Advance : Phase()
