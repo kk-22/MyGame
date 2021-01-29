@@ -135,7 +135,7 @@ class SEUserInterface(private val balance: SEGameBalance,
                         fieldView.highlightLands(listOf(land))
                     } else {
                         setPhase(Phase.SelectDestination(land.units))
-                        fieldView.highlightLands(land.units.first().remainingRouteLands()!!)
+                        fieldView.highlightLands(land.units.first()!!.remainingRouteLands()!!)
                     }
                 }
                 is Phase.SelectDestination -> {

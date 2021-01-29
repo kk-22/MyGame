@@ -60,7 +60,13 @@ class SEPlayActivity : AppCompatActivity() {
             SELandRealmObject.Type.Grass,
         )
         val lands = mockTypes.mapIndexed { index, type ->
-            SELandRealmObject(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+            val land = SELandRealmObject()
+            land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+            land
+        }
+        val realm = Realm.getDefaultInstance()
+        realm.executeTransaction {
+            realm.copyToRealm(lands)
         }
         binding.fieldView.initialize(balance, lands)
 
