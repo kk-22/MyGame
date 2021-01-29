@@ -2,19 +2,35 @@ package jp.co.my.mysen.realm
 
 import android.content.Context
 import android.graphics.Bitmap
+import io.realm.RealmList
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 import jp.co.my.mysen.view.SEFieldView
 
-class SELandRealmObject(val type: Type,
-                        val x: Int,
-                        val y: Int) {
+open class SELandRealmObject: RealmObject() {
 
-    val pointX =
-        (SEFieldView.LAND_WIDTH_AND_HEIGHT * x + SEFieldView.LAND_MARGIN * (x + 1)).toFloat()
-    val pointY =
-        (SEFieldView.LAND_WIDTH_AND_HEIGHT * y + SEFieldView.LAND_MARGIN * (y + 1)).toFloat()
-    val units: MutableList<SEUnitRealmObject> = mutableListOf()
+    private var strType: String = ""
+    var type: Type
+        get() = Type.values().first { it.name == strType }
+        set(value) {
+            strType = value.name
+        }
+    var x: Int = 0
+    var y: Int = 0
+    var pointX = 0.0f
+    var pointY = 0.0f
+    @Ignore
+    val units: RealmList<SEUnitRealmObject> = RealmList()
+
+    fun setup(type: Type, x: Int, y: Int) {
+        this.type = type
+        this.x = x
+        this.y = y
+        pointX = (SEFieldView.LAND_WIDTH_AND_HEIGHT * x + SEFieldView.LAND_MARGIN * (x + 1)).toFloat()
+        pointY = (SEFieldView.LAND_WIDTH_AND_HEIGHT * y + SEFieldView.LAND_MARGIN * (y + 1)).toFloat()
+    }
 
     fun movingCost(unit: SEUnitRealmObject): Int {
         return type.basicCost
