@@ -14,14 +14,9 @@ open class SEGeneralRealmObject: RealmObject() {
 
     @Required
     var name: String = ""
-    @Required
-    var physical_attack: Int? = 0
-    @Required
-    var physical_defence: Int? = 0
-    @Required
-    var special_attack: Int? = 0
-    @Required
-    var special_defence: Int? = 0
-    @Required
-    var speed: Int? = 0
+    var physical_attack: Int = 0
+    var physical_defence: Int = 0
+    var special_attack: Int = 0
+    var special_defence: Int = 0
+    var speed: Int = 0
 }

@@ -1,15 +1,20 @@
 package jp.co.my.mysen.realm
 
-import jp.co.my.mysen.model.SEGeneral
+import io.realm.RealmObject
+import io.realm.annotations.Ignore
 import jp.co.my.mysen.model.SELand
 import jp.co.my.mysen.model.SERoute
 
-class SEUnitRealmObject(
-    val general: SEGeneral,
-    private val startingLand: SELand // 出発地点・所属拠点
-) {
-    var currentLand: SELand = startingLand // 現在地
+open class SEUnitRealmObject: RealmObject() {
+
+    var general: SEGeneralRealmObject? = null
+    @Ignore
+    var startingLand: SELand? = null // 出発地点・所属拠点
+    @Ignore
+    var currentLand: SELand? = null // 現在地
+    @Ignore
     var destinationLand: SELand? = null // 目標地点
+    @Ignore
     var route: SERoute? = null // 目標地点へのルート
 
     var stackedMovingPower = 0 // Landに留まることで蓄積した移動力
