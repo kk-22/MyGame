@@ -1,24 +1,25 @@
 package jp.co.my.mysen.model
 
+import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 
 class SERoute(
-    val lands: List<SELand>, // 通過する地形
+    val lands: List<SELandRealmObject>, // 通過する地形
     private val totalCost: Int // 合計の移動コスト
 ) {
-    constructor(prevSERoute: SERoute, addingLand: SELand, addingCost: Int)
+    constructor(prevSERoute: SERoute, addingLand: SELandRealmObject, addingCost: Int)
             : this(prevSERoute.lands.plus(addingLand), prevSERoute.totalCost + addingCost)
 
     companion object {
         fun bestRoute(unit: SEUnitRealmObject,
-                      destinationLand: SELand,
+                      destinationLand: SELandRealmObject,
                       fieldView: SEFieldView): SERoute? {
             val firstRoute = SERoute(arrayListOf(unit.currentLand!!), 0)
             if (destinationLand == unit.currentLand) return firstRoute
 
             val remainingSERoutes: MutableList<SERoute> = mutableListOf(firstRoute)
-            val searchedLands : MutableList<SELand> = mutableListOf(unit.currentLand!!)
+            val searchedLands : MutableList<SELandRealmObject> = mutableListOf(unit.currentLand!!)
             while (remainingSERoutes.isNotEmpty()) {
                 val prevRoute = remainingSERoutes.first()
                 val prevLand = prevRoute.lands.last()
