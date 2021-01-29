@@ -8,7 +8,7 @@ import android.view.MotionEvent
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 import jp.co.my.mysen.model.SEGameBalance
-import jp.co.my.mysen.model.SELand
+import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
@@ -17,9 +17,9 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     private lateinit var balance: SEGameBalance
 
     // 情報
-    private lateinit var lands: List<SELand>
+    private lateinit var lands: List<SELandRealmObject>
     private var allUnits: MutableList<SEUnitRealmObject> = mutableListOf()
-    private var highlightedLands: MutableList<SELand> = mutableListOf()
+    private var highlightedLands: MutableList<SELandRealmObject> = mutableListOf()
 
     // 描画
     private lateinit var sourceBitmap: Bitmap
@@ -40,7 +40,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         return super.onTouchEvent(e)
     }
 
-    fun initialize(balance: SEGameBalance, lands: List<SELand>) {
+    fun initialize(balance: SEGameBalance, lands: List<SELandRealmObject>) {
         this.balance = balance
 
         val width =
@@ -60,9 +60,9 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         setImage(sourceBitmap)
     }
 
-    private fun drawLand(land: SELand) {
+    private fun drawLand(land: SELandRealmObject) {
         renderCanvas.drawBitmap(
-            SELand.Type.image(context, land.type),
+            SELandRealmObject.Type.image(context, land.type),
             land.pointX,
             land.pointY,
             null
@@ -78,7 +78,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         }
     }
 
-    private fun drawHighlight(land: SELand, isHighlight: Boolean) {
+    private fun drawHighlight(land: SELandRealmObject, isHighlight: Boolean) {
         val width = LAND_MARGIN.toFloat()
         val paint = Paint().apply {
             color = if (isHighlight) Color.argb(255, 255, 0, 0) else BORDER_COLOR
@@ -95,7 +95,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         )
     }
 
-    fun highlightLands(lands: List<SELand>) {
+    fun highlightLands(lands: List<SELandRealmObject>) {
         lands.forEach { drawHighlight(it, true) }
         highlightedLands.addAll(lands)
     }
@@ -105,14 +105,14 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         highlightedLands.clear()
     }
 
-    fun getLand(x: Int, y: Int): SELand? {
+    fun getLand(x: Int, y: Int): SELandRealmObject? {
         if (x < 0 || balance.fieldNumberOfX <= x || y < 0 || balance.fieldNumberOfY <= y) {
             return null
         }
         return lands[x + y * balance.fieldNumberOfX]
     }
 
-    fun moveUnit(unit: SEUnitRealmObject, toLand: SELand) {
+    fun moveUnit(unit: SEUnitRealmObject, toLand: SELandRealmObject) {
         if (unit.currentLand == toLand) {
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
@@ -154,6 +154,6 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     interface Listener {
-        fun onClickLand(land: SELand)
+        fun onClickLand(land: SELandRealmObject)
     }
 }

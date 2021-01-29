@@ -13,7 +13,7 @@ import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.SEGameBalance
-import jp.co.my.mysen.model.SELand
+import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 import jp.co.my.mysen.realm.SECountryRealmObject
 import jp.co.my.mysen.realm.SEGeneralRealmObject
@@ -33,34 +33,34 @@ class SEPlayActivity : AppCompatActivity() {
         userInterface = SEUserInterface(balance, binding)
 
         val mockTypes = arrayOf(
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Fort,
-            SELand.Type.Highway,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Mountain,
-            SELand.Type.Grass,
-            SELand.Type.Highway,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Mountain,
-            SELand.Type.Grass,
-            SELand.Type.Highway,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Highway,
-            SELand.Type.Highway,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
-            SELand.Type.Fort,
-            SELand.Type.Grass,
-            SELand.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Fort,
+            SELandRealmObject.Type.Highway,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Mountain,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Highway,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Mountain,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Highway,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Highway,
+            SELandRealmObject.Type.Highway,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Fort,
+            SELandRealmObject.Type.Grass,
+            SELandRealmObject.Type.Grass,
         )
         val lands = mockTypes.mapIndexed { index, type ->
-            SELand(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+            SELandRealmObject(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
         }
         binding.fieldView.initialize(balance, lands)
 

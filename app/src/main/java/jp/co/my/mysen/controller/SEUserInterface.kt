@@ -8,6 +8,7 @@ import io.realm.kotlin.where
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.*
 import jp.co.my.mysen.realm.SEGeneralRealmObject
+import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
@@ -114,7 +115,7 @@ class SEUserInterface(private val balance: SEGameBalance,
     }
 
     private inner class FieldViewListener : SEFieldView.Listener {
-        override fun onClickLand(land: SELand) {
+        override fun onClickLand(land: SELandRealmObject) {
             fieldView.clearHighlight()
             when (val p = phase) {
                 Phase.FreeOrder -> {
