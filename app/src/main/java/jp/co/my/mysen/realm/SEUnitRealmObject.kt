@@ -2,7 +2,6 @@ package jp.co.my.mysen.realm
 
 import io.realm.RealmObject
 import io.realm.annotations.Ignore
-import jp.co.my.mysen.model.SERoute
 
 open class SEUnitRealmObject: RealmObject() {
 
@@ -11,7 +10,7 @@ open class SEUnitRealmObject: RealmObject() {
     var currentLand: SELandRealmObject? = null // 現在地
     var destinationLand: SELandRealmObject? = null // 目標地点
     @Ignore
-    var route: SERoute? = null // 目標地点へのルート
+    var route: SERouteRealmObject? = null // 目標地点へのルート
 
     var stackedMovingPower = 0 // Landに留まることで蓄積した移動力
 

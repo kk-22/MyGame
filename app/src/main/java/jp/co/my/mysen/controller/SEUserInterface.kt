@@ -9,6 +9,7 @@ import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.*
 import jp.co.my.mysen.realm.SEGeneralRealmObject
 import jp.co.my.mysen.realm.SELandRealmObject
+import jp.co.my.mysen.realm.SERouteRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
@@ -145,7 +146,7 @@ class SEUserInterface(private val balance: SEGameBalance,
                     } else {
                         // 1回目のタップはルート表示のみ
                         p.units.forEach { unit ->
-                            SERoute.bestRoute(unit, land, fieldView)?.also {
+                            SERouteRealmObject.bestRoute(unit, land, fieldView)?.also {
                                 unit.route = it
                                 unit.destinationLand = land
                                 fieldView.highlightLands(it.lands)
