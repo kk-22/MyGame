@@ -7,11 +7,8 @@ import jp.co.my.mysen.model.SERoute
 open class SEUnitRealmObject: RealmObject() {
 
     var general: SEGeneralRealmObject? = null
-    @Ignore
     var startingLand: SELandRealmObject? = null // 出発地点・所属拠点
-    @Ignore
     var currentLand: SELandRealmObject? = null // 現在地
-    @Ignore
     var destinationLand: SELandRealmObject? = null // 目標地点
     @Ignore
     var route: SERoute? = null // 目標地点へのルート
