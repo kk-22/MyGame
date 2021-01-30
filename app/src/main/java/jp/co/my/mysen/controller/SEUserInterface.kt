@@ -97,11 +97,12 @@ class SEUserInterface(private val balance: SEGameBalance,
         val period = 1000 / binding.speedChanger.speedRatio()
         timer.cancel()
         timer = Timer()
+        // BreakPointによる停止中にTimerが進まないように、1回毎にセット
         timer.schedule(object : TimerTask() {
             override fun run() {
                 mainHandler.post { elapseDay() }
             }
-        }, period, period)
+        }, period)
     }
 
     private fun elapseDay() {
@@ -114,6 +115,7 @@ class SEUserInterface(private val balance: SEGameBalance,
             Realm.getDefaultInstance().executeTransaction {
                 fieldView.moveAllUnit()
             }
+            resetTimer()
             return
         }
 
