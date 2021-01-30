@@ -9,7 +9,6 @@ open class SEUnitRealmObject: RealmObject() {
     var startingLand: SELandRealmObject? = null // 出発地点・所属拠点
     var currentLand: SELandRealmObject? = null // 現在地
     var destinationLand: SELandRealmObject? = null // 目標地点
-    @Ignore
     var route: SERouteRealmObject? = null // 目標地点へのルート
 
     var stackedMovingPower = 0 // Landに留まることで蓄積した移動力

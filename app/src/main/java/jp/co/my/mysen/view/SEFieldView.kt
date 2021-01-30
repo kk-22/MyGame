@@ -118,7 +118,9 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
         } else {
-            unit.currentLand!!.units.remove(unit)
+            Realm.getDefaultInstance().executeTransaction {
+                unit.currentLand!!.units.remove(unit)
+            }
             drawLand(unit.currentLand!!)
         }
         Realm.getDefaultInstance().executeTransaction {

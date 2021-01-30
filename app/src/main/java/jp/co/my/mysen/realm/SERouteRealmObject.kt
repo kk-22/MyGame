@@ -1,22 +1,38 @@
 package jp.co.my.mysen.realm
 
+import io.realm.RealmList
+import io.realm.RealmObject
 import jp.co.my.mysen.view.SEFieldView
 
-class SERouteRealmObject(
-    val lands: List<SELandRealmObject>, // 通過する地形
-    private val totalCost: Int // 合計の移動コスト
-) {
-    constructor(prevSERoute: SERouteRealmObject, addingLand: SELandRealmObject, addingCost: Int)
-            : this(prevSERoute.lands.plus(addingLand), prevSERoute.totalCost + addingCost)
+open class SERouteRealmObject: RealmObject() {
+
+    var lands: RealmList<SELandRealmObject> = RealmList() // 通過する地形
+    private var totalCost: Int = 0 // 合計の移動コスト
 
     companion object {
+        // ルートの途中計算で使うクラス
+        class TempRoute(
+            val lands: List<SELandRealmObject>, // 通過する地形
+            val totalCost: Int // 合計の移動コスト
+        ) {
+            constructor(prevRoute: TempRoute, addingLand: SELandRealmObject, addingCost: Int)
+                    : this(prevRoute.lands.plus(addingLand), prevRoute.totalCost + addingCost)
+
+            fun castToObject(): SERouteRealmObject {
+                val obj = SERouteRealmObject()
+                obj.lands.addAll(lands)
+                obj.totalCost = totalCost
+                return obj
+            }
+        }
+
         fun bestRoute(unit: SEUnitRealmObject,
                       destinationLand: SELandRealmObject,
                       fieldView: SEFieldView): SERouteRealmObject? {
-            val firstRoute = SERouteRealmObject(arrayListOf(unit.currentLand!!), 0)
-            if (destinationLand == unit.currentLand) return firstRoute
+            val firstRoute = TempRoute(arrayListOf(unit.currentLand!!), 0)
+            if (destinationLand == unit.currentLand) return firstRoute.castToObject()
 
-            val remainingSERoutes: MutableList<SERouteRealmObject> = mutableListOf(firstRoute)
+            val remainingSERoutes: MutableList<TempRoute> = mutableListOf(firstRoute)
             val searchedLands : MutableList<SELandRealmObject> = mutableListOf(unit.currentLand!!)
             while (remainingSERoutes.isNotEmpty()) {
                 val prevRoute = remainingSERoutes.first()
@@ -32,10 +48,10 @@ class SERouteRealmObject(
                         val cost = nextLand.movingCost(unit)
                         if (cost < 0) return@also
 
-                        val nextRoute = SERouteRealmObject(prevRoute, nextLand, cost)
+                        val nextRoute = TempRoute(prevRoute, nextLand, cost)
                         if (nextLand == destinationLand) {
                             // 目標地点へ到達
-                            return nextRoute
+                            return nextRoute.castToObject()
                         }
                         remainingSERoutes.add(nextRoute)
                         searchedLands.add(nextLand)
