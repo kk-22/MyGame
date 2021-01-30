@@ -58,7 +58,9 @@ class SEUserInterface(private val balance: SEGameBalance,
             is Phase.SelectDestination -> {
                 if (prevPhase.units.first().destinationLand == null) {
                     // 出撃をキャンセル
-                    fieldView.enterUnits(prevPhase.units)
+                    Realm.getDefaultInstance().executeTransaction {
+                        fieldView.enterUnits(prevPhase.units)
+                    }
                 }
             }
             is Phase.Advance -> timer.cancel()
@@ -150,10 +152,10 @@ class SEUserInterface(private val balance: SEGameBalance,
                         p.units.forEach { unit ->
                             SERouteRealmObject.bestRoute(unit, land, fieldView)?.also { route ->
                                 Realm.getDefaultInstance().executeTransaction { realm ->
+                                    unit.route = route
+                                    unit.destinationLand = land
                                     realm.copyToRealm(route)
                                 }
-                                unit.route = route
-                                unit.destinationLand = land
                                 fieldView.highlightLands(route.lands)
                             } ?: run {
                                 Toast.makeText(fieldView.context, "移動不可", Toast.LENGTH_SHORT).show()

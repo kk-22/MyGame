@@ -6,8 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import io.realm.Realm
-import jp.co.my.mygame.R
-import jp.co.my.mygame.createBitmap
+import jp.co.my.mygame.*
 import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
@@ -118,7 +117,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
         } else {
-            unit.currentLand!!.unitObjects.remove(unit)
+            unit.currentLand!!.unitObjects.deleteObject(unit)
             drawLand(unit.currentLand!!)
         }
         toLand.unitObjects.add(unit)
@@ -129,7 +128,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     // 入城・帰還
     fun enterUnits(units: List<SEUnitRealmObject>) {
         val toLand = units.first().currentLand!!
-        toLand.unitObjects.removeAll(units)
+        toLand.unitObjects.deleteAllObject(units)
         allUnits.removeAll(units)
         drawLand(toLand)
     }
