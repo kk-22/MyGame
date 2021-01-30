@@ -1,7 +1,9 @@
 package jp.co.my.mysen.realm
 
+import io.realm.Realm
 import io.realm.RealmList
 import io.realm.RealmObject
+import io.realm.kotlin.createObject
 import jp.co.my.mysen.view.SEFieldView
 
 open class SERouteRealmObject: RealmObject() {
@@ -19,7 +21,7 @@ open class SERouteRealmObject: RealmObject() {
                     : this(prevRoute.lands.plus(addingLand), prevRoute.totalCost + addingCost)
 
             fun castToObject(): SERouteRealmObject {
-                val obj = SERouteRealmObject()
+                val obj = Realm.getDefaultInstance().createObject<SERouteRealmObject>()
                 obj.lands.addAll(lands)
                 obj.totalCost = totalCost
                 return obj
