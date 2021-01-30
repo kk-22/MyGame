@@ -134,8 +134,6 @@ class SEUserInterface(private val balance: SEGameBalance,
                             unit.startingLand = land
                             unit.currentLand = land
                             unit.general = realm.where<SEGeneralRealmObject>().findFirst()
-
-                            realm.copyToRealm(unit)
                             fieldView.moveUnit(unit, land)
                             setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         }
