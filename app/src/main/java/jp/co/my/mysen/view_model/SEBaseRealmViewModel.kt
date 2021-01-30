@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import io.realm.Realm
 import io.realm.kotlin.where
-import jp.co.my.mysen.realm.SECountryRealmObject
-import jp.co.my.mysen.realm.SEGeneralRealmObject
+import jp.co.my.mysen.realm.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -30,8 +29,15 @@ class SEBaseRealmViewModel: ViewModel() {
             val realm = Realm.getDefaultInstance()
             realm.beginTransaction()
             // 書き込み
-            realm.where<SECountryRealmObject>().findAll().deleteAllFromRealm()
-            realm.where<SEGeneralRealmObject>().findAll().deleteAllFromRealm()
+
+            arrayOf(SECountryRealmObject::class,
+                SEGeneralRealmObject::class,
+                SELandRealmObject::class,
+                SERouteRealmObject::class,
+                SEUnitRealmObject::class,).forEach {
+                realm.where(it.java).findAll().deleteAllFromRealm()
+            }
+
             realm.createAllFromJson(SECountryRealmObject::class.java, countryJson)
             realm.createAllFromJson(SEGeneralRealmObject::class.java, generalJson)
             // リレーションシップ登録
