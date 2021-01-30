@@ -1,24 +1,22 @@
-package jp.co.my.mysen.model
+package jp.co.my.mysen.realm
 
-import jp.co.my.mysen.realm.SELandRealmObject
-import jp.co.my.mysen.realm.SEUnitRealmObject
 import jp.co.my.mysen.view.SEFieldView
 
-class SERoute(
+class SERouteRealmObject(
     val lands: List<SELandRealmObject>, // 通過する地形
     private val totalCost: Int // 合計の移動コスト
 ) {
-    constructor(prevSERoute: SERoute, addingLand: SELandRealmObject, addingCost: Int)
+    constructor(prevSERoute: SERouteRealmObject, addingLand: SELandRealmObject, addingCost: Int)
             : this(prevSERoute.lands.plus(addingLand), prevSERoute.totalCost + addingCost)
 
     companion object {
         fun bestRoute(unit: SEUnitRealmObject,
                       destinationLand: SELandRealmObject,
-                      fieldView: SEFieldView): SERoute? {
-            val firstRoute = SERoute(arrayListOf(unit.currentLand!!), 0)
+                      fieldView: SEFieldView): SERouteRealmObject? {
+            val firstRoute = SERouteRealmObject(arrayListOf(unit.currentLand!!), 0)
             if (destinationLand == unit.currentLand) return firstRoute
 
-            val remainingSERoutes: MutableList<SERoute> = mutableListOf(firstRoute)
+            val remainingSERoutes: MutableList<SERouteRealmObject> = mutableListOf(firstRoute)
             val searchedLands : MutableList<SELandRealmObject> = mutableListOf(unit.currentLand!!)
             while (remainingSERoutes.isNotEmpty()) {
                 val prevRoute = remainingSERoutes.first()
@@ -34,7 +32,7 @@ class SERoute(
                         val cost = nextLand.movingCost(unit)
                         if (cost < 0) return@also
 
-                        val nextRoute = SERoute(prevRoute, nextLand, cost)
+                        val nextRoute = SERouteRealmObject(prevRoute, nextLand, cost)
                         if (nextLand == destinationLand) {
                             // 目標地点へ到達
                             return nextRoute
