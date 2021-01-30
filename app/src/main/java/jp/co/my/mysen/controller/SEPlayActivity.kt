@@ -13,10 +13,10 @@ import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SePlayActivityBinding
 import jp.co.my.mysen.model.SEGameBalance
-import jp.co.my.mysen.realm.SELandRealmObject
-import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 import jp.co.my.mysen.realm.SECountryRealmObject
 import jp.co.my.mysen.realm.SEGeneralRealmObject
+import jp.co.my.mysen.realm.SELandRealmObject
+import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 
 class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
@@ -32,54 +32,52 @@ class SEPlayActivity : AppCompatActivity() {
         balance = SEGameBalance()
         userInterface = SEUserInterface(balance, binding)
 
-        val mockTypes = arrayOf(
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Fort,
-            SELandRealmObject.Type.Highway,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Mountain,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Highway,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Mountain,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Highway,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Highway,
-            SELandRealmObject.Type.Highway,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Fort,
-            SELandRealmObject.Type.Grass,
-            SELandRealmObject.Type.Grass,
-        )
-        val lands = mockTypes.mapIndexed { index, type ->
-            val land = SELandRealmObject()
-            land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
-            land
-        }
         val realm = Realm.getDefaultInstance()
-        realm.executeTransaction {
-            realm.copyToRealm(lands)
+        if (realm.where<SEGeneralRealmObject>().findAll().count() == 0
+            || realm.where<SECountryRealmObject>().findAll().count() == 0) {
+            fetchModels()
+        } else {
+            loadLands()
         }
-        binding.fieldView.initialize(balance, lands)
-
-        loadRealm()
     }
 
-    private fun loadRealm() {
+    private fun fetchModels() {
+        Log.d("tag", "Start fetchModels")
+        Toast.makeText(this, "Start fetchModels", Toast.LENGTH_SHORT).show()
+        viewModel.createBaseRealms().observe(this, { result: Boolean ->
+            if (result) {
+                Toast.makeText(this, "Fetch success", Toast.LENGTH_SHORT).show()
+                loadLands()
+            } else {
+                Toast.makeText(this, "APIレスポンス取得に失敗", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun loadLands() {
         val realm = Realm.getDefaultInstance()
-        realm.executeTransaction {
-            val countries = realm.where<SECountryRealmObject>().findAll()
-            val generals = realm.where<SEGeneralRealmObject>().findAll()
-            Log.d("tag", generals.toString())
+        var lands: List<SELandRealmObject> = realm.where<SELandRealmObject>().findAll()
+        if (0 < lands.count()) {
+            Log.d("tag", lands.toString())
+        } else {
+            Log.d("tag", "Make new lands")
+            val mockTypes = arrayOf(
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
+            )
+            lands = mockTypes.mapIndexed { index, type ->
+                val land = SELandRealmObject()
+                land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+                land
+            }
+            realm.executeTransaction {
+                realm.copyToRealm(lands)
+            }
         }
+        binding.fieldView.initialize(balance, lands)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -95,13 +93,7 @@ class SEPlayActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_reset_realm -> {
-                viewModel.createBaseRealms().observe(this, { result: Boolean ->
-                    if (result) {
-                        loadRealm()
-                    } else {
-                        Toast.makeText(this, "APIレスポンス取得に失敗", Toast.LENGTH_SHORT).show()
-                    }
-                })
+                fetchModels()
                 true
             }
             else -> super.onOptionsItemSelected(item)
