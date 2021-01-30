@@ -69,7 +69,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             null
         )
 
-        if (land.units.isNotEmpty()) {
+        if (land.unitObjects.isNotEmpty()) {
             renderCanvas.drawBitmap(
                 R.drawable.se_unit.createBitmap(UNIT_WIDTH, UNIT_HEIGHT, context),
                 land.pointX + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
@@ -119,12 +119,12 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             allUnits.add(unit)
         } else {
             Realm.getDefaultInstance().executeTransaction {
-                unit.currentLand!!.units.remove(unit)
+                unit.currentLand!!.unitObjects.remove(unit)
             }
             drawLand(unit.currentLand!!)
         }
         Realm.getDefaultInstance().executeTransaction {
-            toLand.units.add(unit)
+            toLand.unitObjects.add(unit)
         }
         unit.currentLand = toLand
         drawLand(toLand)
@@ -133,7 +133,7 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     // 入城・帰還
     fun enterUnits(units: List<SEUnitRealmObject>) {
         val toLand = units.first().currentLand!!
-        toLand.units.removeAll(units)
+        toLand.unitObjects.removeAll(units)
         allUnits.removeAll(units)
         drawLand(toLand)
     }

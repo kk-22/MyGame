@@ -120,7 +120,7 @@ class SEUserInterface(private val balance: SEGameBalance,
             fieldView.clearHighlight()
             when (val p = phase) {
                 Phase.FreeOrder -> {
-                    if (land.units.isEmpty()) {
+                    if (land.unitObjects.isEmpty()) {
                         val unit = SEUnitRealmObject()
                         unit.startingLand = land
                         unit.currentLand = land
@@ -135,8 +135,8 @@ class SEUserInterface(private val balance: SEGameBalance,
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))
                     } else {
-                        setPhase(Phase.SelectDestination(land.units))
-                        fieldView.highlightLands(land.units.first()!!.remainingRouteLands()!!)
+                        setPhase(Phase.SelectDestination(land.unitObjects))
+                        fieldView.highlightLands(land.unitObjects.first()!!.remainingRouteLands()!!)
                     }
                 }
                 is Phase.SelectDestination -> {
