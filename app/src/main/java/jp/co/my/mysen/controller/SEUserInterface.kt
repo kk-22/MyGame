@@ -4,9 +4,10 @@ import android.os.Handler
 import android.util.Log
 import android.widget.Toast
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import jp.co.my.mygame.databinding.SePlayActivityBinding
-import jp.co.my.mysen.model.*
+import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.SEGeneralRealmObject
 import jp.co.my.mysen.realm.SELandRealmObject
 import jp.co.my.mysen.realm.SERouteRealmObject
@@ -125,18 +126,17 @@ class SEUserInterface(private val balance: SEGameBalance,
             when (val p = phase) {
                 Phase.FreeOrder -> {
                     if (land.unitObjects.isEmpty()) {
-                        val unit = SEUnitRealmObject()
-                        unit.startingLand = land
-                        unit.currentLand = land
-
                         val realm = Realm.getDefaultInstance()
                         realm.executeTransaction {
+                            val unit = realm.createObject<SEUnitRealmObject>()
+                            unit.startingLand = land
+                            unit.currentLand = land
                             unit.general = realm.where<SEGeneralRealmObject>().findFirst()
+
                             realm.copyToRealm(unit)
                             fieldView.moveUnit(unit, land)
+                            setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         }
-
-                        setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))
                     } else {
                         setPhase(Phase.SelectDestination(land.unitObjects))
@@ -149,16 +149,15 @@ class SEUserInterface(private val balance: SEGameBalance,
                         setPhase(Phase.FreeOrder)
                     } else {
                         // 1回目のタップはルート表示のみ
-                        p.units.forEach { unit ->
-                            SERouteRealmObject.bestRoute(unit, land, fieldView)?.also { route ->
-                                Realm.getDefaultInstance().executeTransaction { realm ->
+                        Realm.getDefaultInstance().executeTransaction {
+                            p.units.forEach { unit ->
+                                SERouteRealmObject.bestRoute(unit, land, fieldView)?.also { route ->
                                     unit.route = route
                                     unit.destinationLand = land
-                                    realm.copyToRealm(route)
+                                    fieldView.highlightLands(route.lands)
+                                } ?: run {
+                                    Toast.makeText(fieldView.context, "移動不可", Toast.LENGTH_SHORT).show()
                                 }
-                                fieldView.highlightLands(route.lands)
-                            } ?: run {
-                                Toast.makeText(fieldView.context, "移動不可", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
