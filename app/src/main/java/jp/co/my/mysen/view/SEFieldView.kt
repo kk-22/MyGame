@@ -43,13 +43,14 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     fun initialize(balance: SEGameBalance, lands: List<SELandRealmObject>) {
         this.balance = balance
 
-        val width =
-            LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
-        val height =
-            LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfY + LAND_MARGIN * (balance.fieldNumberOfY + 1)
+        val width = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
+        val height = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfY + LAND_MARGIN * (balance.fieldNumberOfY + 1)
         sourceBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         renderCanvas = Canvas(this.sourceBitmap)
         this.lands = lands
+
+        allUnits.clear()
+        lands.forEach { allUnits.addAll(it.unitObjects) }
 
         // 塗りつぶし
         val paint = Paint()
