@@ -1,6 +1,5 @@
 package jp.co.my.mysen.view_model
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -35,7 +34,7 @@ class SEBaseRealmViewModel: ViewModel() {
                 SELandRealmObject::class,
                 SERouteRealmObject::class,
                 SEUnitRealmObject::class,).forEach {
-                realm.where(it.java).findAll().deleteAllFromRealm()
+                realm.delete(it.java)
             }
 
             realm.createAllFromJson(SECountryRealmObject::class.java, countryJson)
