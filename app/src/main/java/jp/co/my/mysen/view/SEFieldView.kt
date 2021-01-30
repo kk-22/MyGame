@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
+import io.realm.Realm
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
 import jp.co.my.mysen.model.SEGameBalance
@@ -120,7 +121,9 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             unit.currentLand!!.units.remove(unit)
             drawLand(unit.currentLand!!)
         }
-        toLand.units.add(unit)
+        Realm.getDefaultInstance().executeTransaction {
+            toLand.units.add(unit)
+        }
         unit.currentLand = toLand
         drawLand(toLand)
     }

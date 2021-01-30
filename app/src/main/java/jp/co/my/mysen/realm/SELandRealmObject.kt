@@ -21,8 +21,7 @@ open class SELandRealmObject: RealmObject() {
     var y: Int = 0
     var pointX = 0.0f
     var pointY = 0.0f
-    @Ignore
-    val units: RealmList<SEUnitRealmObject> = RealmList()
+    var units: RealmList<SEUnitRealmObject> = RealmList()
 
     fun setup(type: Type, x: Int, y: Int) {
         this.type = type
