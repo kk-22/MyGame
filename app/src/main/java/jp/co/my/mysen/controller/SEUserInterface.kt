@@ -146,10 +146,13 @@ class SEUserInterface(private val balance: SEGameBalance,
                     } else {
                         // 1回目のタップはルート表示のみ
                         p.units.forEach { unit ->
-                            SERouteRealmObject.bestRoute(unit, land, fieldView)?.also {
-                                unit.route = it
+                            SERouteRealmObject.bestRoute(unit, land, fieldView)?.also { route ->
+                                Realm.getDefaultInstance().executeTransaction { realm ->
+                                    realm.copyToRealm(route)
+                                }
+                                unit.route = route
                                 unit.destinationLand = land
-                                fieldView.highlightLands(it.lands)
+                                fieldView.highlightLands(route.lands)
                             } ?: run {
                                 Toast.makeText(fieldView.context, "移動不可", Toast.LENGTH_SHORT).show()
                             }
