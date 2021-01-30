@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
@@ -68,13 +69,12 @@ class SEPlayActivity : AppCompatActivity() {
                 SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
                 SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
             )
-            lands = mockTypes.mapIndexed { index, type ->
-                val land = SELandRealmObject()
-                land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
-                land
-            }
             realm.executeTransaction {
-                realm.copyToRealm(lands)
+                lands = mockTypes.mapIndexed { index, type ->
+                    val land = realm.createObject<SELandRealmObject>()
+                    land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+                    land
+                }
             }
         }
         binding.fieldView.initialize(balance, lands)
