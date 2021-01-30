@@ -108,7 +108,9 @@ class SEUserInterface(private val balance: SEGameBalance,
         day++
         if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
             binding.dayProgressbar.progress = day
-            fieldView.moveAllUnit()
+            Realm.getDefaultInstance().executeTransaction {
+                fieldView.moveAllUnit()
+            }
             return
         }
 
@@ -129,9 +131,9 @@ class SEUserInterface(private val balance: SEGameBalance,
                         realm.executeTransaction {
                             unit.general = realm.where<SEGeneralRealmObject>().findFirst()
                             realm.copyToRealm(unit)
+                            fieldView.moveUnit(unit, land)
                         }
 
-                        fieldView.moveUnit(unit, land)
                         setPhase(Phase.SelectDestination(arrayListOf(unit)))
                         fieldView.highlightLands(listOf(land))
                     } else {

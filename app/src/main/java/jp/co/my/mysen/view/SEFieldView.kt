@@ -118,14 +118,10 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
             // 新たに出撃したユニットを登録
             allUnits.add(unit)
         } else {
-            Realm.getDefaultInstance().executeTransaction {
-                unit.currentLand!!.unitObjects.remove(unit)
-            }
+            unit.currentLand!!.unitObjects.remove(unit)
             drawLand(unit.currentLand!!)
         }
-        Realm.getDefaultInstance().executeTransaction {
-            toLand.unitObjects.add(unit)
-        }
+        toLand.unitObjects.add(unit)
         unit.currentLand = toLand
         drawLand(toLand)
     }
