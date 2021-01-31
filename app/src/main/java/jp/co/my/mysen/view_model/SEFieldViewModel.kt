@@ -1,10 +1,13 @@
 package jp.co.my.mysen.view_model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import io.realm.Realm
+import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -17,7 +20,36 @@ object HttpClient {
 
 class SEFieldViewModel: ViewModel() {
 
-    fun createBaseRealms(): LiveData<Boolean> {
+    fun loadObject(balance: SEGameBalance): List<SELandRealmObject> {
+        val realm = Realm.getDefaultInstance()
+        var lands: List<SELandRealmObject> = realm.where<SELandRealmObject>().findAll()
+        if (0 < lands.count()) {
+            Log.d("tag", lands.toString())
+        } else {
+            Log.d("tag", "Make new lands")
+            val mockTypes = arrayOf(
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
+            )
+            realm.executeTransaction {
+                lands = mockTypes.mapIndexed { index, type ->
+                    val land = realm.createObject<SELandRealmObject>()
+                    land.setup(
+                        type,
+                        index % balance.fieldNumberOfX,
+                        index / balance.fieldNumberOfY
+                    )
+                    land
+                }
+            }
+        }
+        return lands
+    }
+
+    fun resetObject(): LiveData<Boolean> {
         return liveData(Dispatchers.IO) {
             val countryJson = httpGet("https://script.google.com/macros/s/AKfycbzVk_CvxzpIAxXhx5lroyDzayI6sV4TLoLiHYU-CgwbuHKbPTM/exec?sheet=country")
             val generalJson = httpGet("https://script.google.com/macros/s/AKfycbzVk_CvxzpIAxXhx5lroyDzayI6sV4TLoLiHYU-CgwbuHKbPTM/exec?sheet=general")

@@ -34,7 +34,7 @@ class SEPlayActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_reset_realm -> {
-                fragment.fetchModels()
+                fragment.resetField()
                 true
             }
             else -> super.onOptionsItemSelected(item)
