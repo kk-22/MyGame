@@ -18,7 +18,7 @@ import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.*
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
-import jp.co.my.mysen.view_model.SEBaseRealmViewModel
+import jp.co.my.mysen.view_model.SEFieldViewModel
 import java.util.*
 
 class SEFieldFragment: Fragment() {
@@ -31,7 +31,7 @@ class SEFieldFragment: Fragment() {
     private var _binding: SeFragmentFieldBinding? = null
     private val binding get() = _binding!!
     private lateinit var fieldView: SEFieldView
-    private val viewModel : SEBaseRealmViewModel by viewModels()
+    private val viewModel : SEFieldViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
