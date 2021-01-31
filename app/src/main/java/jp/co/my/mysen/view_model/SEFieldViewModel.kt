@@ -15,7 +15,7 @@ object HttpClient {
     val instance = OkHttpClient()
 }
 
-class SEBaseRealmViewModel: ViewModel() {
+class SEFieldViewModel: ViewModel() {
 
     fun createBaseRealms(): LiveData<Boolean> {
         return liveData(Dispatchers.IO) {
