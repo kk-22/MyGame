@@ -23,7 +23,6 @@ import java.util.*
 class SEFieldFragment: Fragment() {
     private lateinit var playerObject: SEPlayerRealmObject
     private var phase: Phase = Phase.FreeOrder
-    private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
 
@@ -71,6 +70,7 @@ class SEFieldFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        timer.cancel()
     }
 
     private fun setPhase(nextPhase: Phase) {
@@ -80,7 +80,6 @@ class SEFieldFragment: Fragment() {
         phase = nextPhase
         when (prevPhase) {
             is Phase.FreeOrder -> {
-                binding.dayProgressbar.progress = 0
             }
             is Phase.SelectDestination -> {
                 if (prevPhase.units.first().destinationLand == null) {
@@ -99,9 +98,6 @@ class SEFieldFragment: Fragment() {
             is Phase.SelectDestination -> {
             }
             is Phase.Advance -> {
-                if (prevPhase is Phase.FreeOrder) {
-                    day = 0
-                }
                 resetTimer()
             }
             is Phase.FreeOrder, is Phase.Pause -> {
@@ -132,20 +128,20 @@ class SEFieldFragment: Fragment() {
     }
 
     private fun elapseDay() {
-        Log.d("tag", "elapse day $day")
+        Log.d("tag", "elapse day ${playerObject.currentDay}")
         if (phase !is Phase.Advance) throw IllegalArgumentException("Phase is not Advance")
 
-        day++
-        if (day <= playerObject.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
-            binding.dayProgressbar.progress = day
-            Realm.getDefaultInstance().executeTransaction {
+        Realm.getDefaultInstance().executeTransaction {
+            playerObject.currentDay++
+            if (playerObject.currentDay <= playerObject.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
                 fieldView.moveAllUnit()
+                resetTimer()
+            } else {
+                playerObject.currentDay = 0
+                setPhase(Phase.FreeOrder)
             }
-            resetTimer()
-            return
+            binding.dayProgressbar.progress = playerObject.currentDay
         }
-
-        setPhase(Phase.FreeOrder)
     }
 
     private fun setupField() {
@@ -156,7 +152,9 @@ class SEFieldFragment: Fragment() {
                 playerObject = realm.createObject<SEPlayerRealmObject>()
             }
         }
+        binding.dayProgressbar.progress = playerObject.currentDay
         binding.dayProgressbar.max = playerObject.interfaceMaxDay
+
         binding.fieldView.initialize(playerObject, viewModel.loadObject(playerObject))
     }
 
