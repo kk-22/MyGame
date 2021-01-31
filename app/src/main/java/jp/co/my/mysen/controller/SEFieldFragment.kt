@@ -1,33 +1,47 @@
 package jp.co.my.mysen.controller
 
+import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import jp.co.my.mygame.databinding.SePlayActivityBinding
+import jp.co.my.mygame.databinding.SeFragmentFieldBinding
+import jp.co.my.mygame.toast
 import jp.co.my.mysen.model.SEGameBalance
-import jp.co.my.mysen.realm.SEGeneralRealmObject
-import jp.co.my.mysen.realm.SELandRealmObject
-import jp.co.my.mysen.realm.SERouteRealmObject
-import jp.co.my.mysen.realm.SEUnitRealmObject
+import jp.co.my.mysen.realm.*
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
+import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 import java.util.*
 
-class SEUserInterface(private val balance: SEGameBalance,
-                      private val binding: SePlayActivityBinding
-) {
+class SEFieldFragment: Fragment() {
+    private lateinit var balance: SEGameBalance
     private var phase: Phase = Phase.FreeOrder
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
     private val mainHandler = Handler()
 
-    private var fieldView: SEFieldView = binding.fieldView
+    private var _binding: SeFragmentFieldBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var fieldView: SEFieldView
+    private val viewModel : SEBaseRealmViewModel by viewModels()
 
-    init {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = SeFragmentFieldBinding.inflate(inflater, container, false)
+        fieldView = binding.fieldView
         fieldView.listener = FieldViewListener()
+        balance = SEGameBalance()
 
         updatePhaseButton()
         binding.dayProgressbar.max = balance.interfaceMaxDay
@@ -45,6 +59,21 @@ class SEUserInterface(private val balance: SEGameBalance,
                 if (phase is Phase.Advance) resetTimer()
             }
         }
+
+        val realm = Realm.getDefaultInstance()
+        if (realm.where<SEGeneralRealmObject>().count() == 0L
+            || realm.where<SECountryRealmObject>().count() == 0L) {
+            fetchModels()
+        } else {
+            loadLands()
+        }
+
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setPhase(nextPhase: Phase) {
@@ -121,6 +150,45 @@ class SEUserInterface(private val balance: SEGameBalance,
 
         setPhase(Phase.FreeOrder)
     }
+
+    fun fetchModels() {
+        Log.d("tag", "Start fetchModels")
+        "Start fetchModels".toast(requireContext())
+        viewModel.createBaseRealms().observe(viewLifecycleOwner, { result: Boolean ->
+            if (result) {
+                "Fetch success".toast(requireContext())
+                loadLands()
+            } else {
+                "APIレスポンス取得に失敗".toast(requireContext())
+            }
+        })
+    }
+
+    private fun loadLands() {
+        val realm = Realm.getDefaultInstance()
+        var lands: List<SELandRealmObject> = realm.where<SELandRealmObject>().findAll()
+        if (0 < lands.count()) {
+            Log.d("tag", lands.toString())
+        } else {
+            Log.d("tag", "Make new lands")
+            val mockTypes = arrayOf(
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
+                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
+            )
+            realm.executeTransaction {
+                lands = mockTypes.mapIndexed { index, type ->
+                    val land = realm.createObject<SELandRealmObject>()
+                    land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
+                    land
+                }
+            }
+        }
+        binding.fieldView.initialize(balance, lands)
+    }
+
 
     private inner class FieldViewListener : SEFieldView.Listener {
         override fun onClickLand(land: SELandRealmObject) {
