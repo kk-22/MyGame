@@ -24,6 +24,8 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     // 描画
     private lateinit var sourceBitmap: Bitmap
     private lateinit var renderCanvas: Canvas
+    private var landImages: MutableMap<String, Bitmap> = mutableMapOf()
+    private var unitImages: MutableMap<String, Bitmap> = mutableMapOf()
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(e: MotionEvent): Boolean {
@@ -63,15 +65,15 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
 
     private fun drawLand(land: SELandRealmObject) {
         renderCanvas.drawBitmap(
-            SELandRealmObject.Type.image(context, land.type),
+            getLandImage(land),
             land.pointX,
             land.pointY,
             null
         )
 
-        if (land.unitObjects.isNotEmpty()) {
+        land.unitObjects.firstOrNull()?.also {
             renderCanvas.drawBitmap(
-                R.drawable.se_unit.createBitmap(UNIT_WIDTH, UNIT_HEIGHT, context),
+                getUnitImage(it),
                 land.pointX + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
                 land.pointY + (LAND_WIDTH_AND_HEIGHT - UNIT_WIDTH) / 2,
                 null
@@ -147,6 +149,28 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
                     moveUnit(unit, it)
                 }
         }
+    }
+
+    private fun getLandImage(land: SELandRealmObject): Bitmap {
+        val key = land.type.title
+        landImages[key]?.also { return it }
+        landImages[key] = land.type.imageId.createBitmap(
+            LAND_WIDTH_AND_HEIGHT,
+            LAND_WIDTH_AND_HEIGHT,
+            context
+        )
+        return landImages[key]!!
+    }
+
+    private fun getUnitImage(unit: SEUnitRealmObject): Bitmap {
+        val key = "test"
+        unitImages[key]?.also { return it }
+        unitImages[key] = R.drawable.se_unit.createBitmap(
+            UNIT_WIDTH,
+            UNIT_HEIGHT,
+            context
+        )
+        return unitImages[key]!!
     }
 
     companion object {
