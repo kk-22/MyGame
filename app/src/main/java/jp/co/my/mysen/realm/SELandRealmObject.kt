@@ -1,12 +1,8 @@
 package jp.co.my.mysen.realm
 
-import android.content.Context
-import android.graphics.Bitmap
 import io.realm.RealmList
 import io.realm.RealmObject
-import io.realm.annotations.Ignore
 import jp.co.my.mygame.R
-import jp.co.my.mygame.createBitmap
 import jp.co.my.mysen.view.SEFieldView
 
 open class SELandRealmObject: RealmObject() {
@@ -49,18 +45,5 @@ open class SELandRealmObject: RealmObject() {
         Mountain("山", -1, R.drawable.se_land_mountain),
         Fort("砦", 50, R.drawable.se_land_fort),
         ;
-
-        companion object {
-            private var images: MutableMap<String, Bitmap> = mutableMapOf()
-            fun image(context: Context, type: Type): Bitmap {
-                images[type.title]?.also { return it }
-                images[type.title] = type.imageId.createBitmap(
-                    SEFieldView.LAND_WIDTH_AND_HEIGHT,
-                    SEFieldView.LAND_WIDTH_AND_HEIGHT,
-                    context
-                )
-                return images[type.title]!!
-            }
-        }
     }
 }
