@@ -14,7 +14,6 @@ import io.realm.kotlin.createObject
 import io.realm.kotlin.where
 import jp.co.my.mygame.databinding.SeFragmentFieldBinding
 import jp.co.my.mygame.toast
-import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.*
 import jp.co.my.mysen.view.SEFieldView
 import jp.co.my.mysen.view.SESpeedChanger
@@ -22,7 +21,7 @@ import jp.co.my.mysen.view_model.SEFieldViewModel
 import java.util.*
 
 class SEFieldFragment: Fragment() {
-    private lateinit var balance: SEGameBalance
+    private lateinit var playerObject: SEPlayerRealmObject
     private var phase: Phase = Phase.FreeOrder
     private var day = 0 // 進行フェーズの現在日
     private var timer = Timer()
@@ -41,10 +40,8 @@ class SEFieldFragment: Fragment() {
         _binding = SeFragmentFieldBinding.inflate(inflater, container, false)
         fieldView = binding.fieldView
         fieldView.listener = FieldViewListener()
-        balance = SEGameBalance()
 
         updatePhaseButton()
-        binding.dayProgressbar.max = balance.interfaceMaxDay
         binding.phaseButton.setOnClickListener {
             val nextPhase = when (phase) {
                 is Phase.FreeOrder -> Phase.Advance
@@ -139,7 +136,7 @@ class SEFieldFragment: Fragment() {
         if (phase !is Phase.Advance) throw IllegalArgumentException("Phase is not Advance")
 
         day++
-        if (day <= balance.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
+        if (day <= playerObject.interfaceMaxDay) { // 最後の日付の後に1日分の時間猶予を作るため、timer実行回数はinterfaceMaxDayよりも1回多い
             binding.dayProgressbar.progress = day
             Realm.getDefaultInstance().executeTransaction {
                 fieldView.moveAllUnit()
@@ -152,7 +149,15 @@ class SEFieldFragment: Fragment() {
     }
 
     private fun setupField() {
-        binding.fieldView.initialize(balance, viewModel.loadObject(balance))
+        Realm.getDefaultInstance().executeTransaction { realm ->
+            realm.where<SEPlayerRealmObject>().findFirst()?.also { player ->
+                playerObject = player
+            } ?: run {
+                playerObject = realm.createObject<SEPlayerRealmObject>()
+            }
+        }
+        binding.dayProgressbar.max = playerObject.interfaceMaxDay
+        binding.fieldView.initialize(playerObject, viewModel.loadObject(playerObject))
     }
 
     fun resetField() {
