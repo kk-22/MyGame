@@ -1,83 +1,24 @@
 package jp.co.my.mysen.controller
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import io.realm.Realm
-import io.realm.kotlin.createObject
-import io.realm.kotlin.where
 import jp.co.my.mygame.MainActivity
 import jp.co.my.mygame.R
 import jp.co.my.mygame.databinding.SePlayActivityBinding
-import jp.co.my.mysen.model.SEGameBalance
-import jp.co.my.mysen.realm.SECountryRealmObject
-import jp.co.my.mysen.realm.SEGeneralRealmObject
-import jp.co.my.mysen.realm.SELandRealmObject
-import jp.co.my.mysen.view_model.SEBaseRealmViewModel
 
 class SEPlayActivity : AppCompatActivity() {
     private lateinit var binding: SePlayActivityBinding
-    private lateinit var balance: SEGameBalance
-    private lateinit var userInterface: SEUserInterface
-    private val viewModel : SEBaseRealmViewModel by viewModels()
+    private lateinit var fragment: SEFieldFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = SePlayActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        balance = SEGameBalance()
-        userInterface = SEUserInterface(balance, binding)
-
-        val realm = Realm.getDefaultInstance()
-        if (realm.where<SEGeneralRealmObject>().count() == 0L
-            || realm.where<SECountryRealmObject>().count() == 0L) {
-            fetchModels()
-        } else {
-            loadLands()
-        }
-    }
-
-    private fun fetchModels() {
-        Log.d("tag", "Start fetchModels")
-        Toast.makeText(this, "Start fetchModels", Toast.LENGTH_SHORT).show()
-        viewModel.createBaseRealms().observe(this, { result: Boolean ->
-            if (result) {
-                Toast.makeText(this, "Fetch success", Toast.LENGTH_SHORT).show()
-                loadLands()
-            } else {
-                Toast.makeText(this, "APIレスポンス取得に失敗", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun loadLands() {
-        val realm = Realm.getDefaultInstance()
-        var lands: List<SELandRealmObject> = realm.where<SELandRealmObject>().findAll()
-        if (0 < lands.count()) {
-            Log.d("tag", lands.toString())
-        } else {
-            Log.d("tag", "Make new lands")
-            val mockTypes = arrayOf(
-                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
-                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
-                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Mountain,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
-                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Highway,SELandRealmObject.Type.Grass,
-                SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
-            )
-            realm.executeTransaction {
-                lands = mockTypes.mapIndexed { index, type ->
-                    val land = realm.createObject<SELandRealmObject>()
-                    land.setup(type, index % balance.fieldNumberOfX, index / balance.fieldNumberOfY)
-                    land
-                }
-            }
-        }
-        binding.fieldView.initialize(balance, lands)
+        fragment = SEFieldFragment()
+        supportFragmentManager.beginTransaction().add(R.id.root_constraint, fragment).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,7 +34,7 @@ class SEPlayActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_reset_realm -> {
-                fetchModels()
+                fragment.fetchModels()
                 true
             }
             else -> super.onOptionsItemSelected(item)
