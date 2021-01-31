@@ -34,8 +34,8 @@ class SEPlayActivity : AppCompatActivity() {
         userInterface = SEUserInterface(balance, binding)
 
         val realm = Realm.getDefaultInstance()
-        if (realm.where<SEGeneralRealmObject>().findAll().count() == 0
-            || realm.where<SECountryRealmObject>().findAll().count() == 0) {
+        if (realm.where<SEGeneralRealmObject>().count() == 0L
+            || realm.where<SECountryRealmObject>().count() == 0L) {
             fetchModels()
         } else {
             loadLands()
