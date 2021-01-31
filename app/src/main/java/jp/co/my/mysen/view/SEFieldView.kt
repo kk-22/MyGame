@@ -7,14 +7,14 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import jp.co.my.mygame.R
 import jp.co.my.mygame.createBitmap
-import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.SELandRealmObject
+import jp.co.my.mysen.realm.SEPlayerRealmObject
 import jp.co.my.mysen.realm.SEUnitRealmObject
 
 class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(context, attrs) {
     // 外部参照
     lateinit var listener: Listener
-    private lateinit var balance: SEGameBalance
+    private lateinit var playerObject: SEPlayerRealmObject
 
     // 情報
     private lateinit var lands: List<SELandRealmObject>
@@ -40,11 +40,11 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
         return super.onTouchEvent(e)
     }
 
-    fun initialize(balance: SEGameBalance, lands: List<SELandRealmObject>) {
-        this.balance = balance
+    fun initialize(playerObject: SEPlayerRealmObject, lands: List<SELandRealmObject>) {
+        this.playerObject = playerObject
 
-        val width = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfX + LAND_MARGIN * (balance.fieldNumberOfX + 1)
-        val height = LAND_WIDTH_AND_HEIGHT * balance.fieldNumberOfY + LAND_MARGIN * (balance.fieldNumberOfY + 1)
+        val width = LAND_WIDTH_AND_HEIGHT * playerObject.fieldNumberOfX + LAND_MARGIN * (playerObject.fieldNumberOfX + 1)
+        val height = LAND_WIDTH_AND_HEIGHT * playerObject.fieldNumberOfY + LAND_MARGIN * (playerObject.fieldNumberOfY + 1)
         sourceBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
         renderCanvas = Canvas(this.sourceBitmap)
         this.lands = lands
@@ -107,10 +107,10 @@ class SEFieldView(context: Context, attrs: AttributeSet) : SosotataImageView(con
     }
 
     fun getLand(x: Int, y: Int): SELandRealmObject? {
-        if (x < 0 || balance.fieldNumberOfX <= x || y < 0 || balance.fieldNumberOfY <= y) {
+        if (x < 0 || playerObject.fieldNumberOfX <= x || y < 0 || playerObject.fieldNumberOfY <= y) {
             return null
         }
-        return lands[x + y * balance.fieldNumberOfX]
+        return lands[x + y * playerObject.fieldNumberOfX]
     }
 
     fun moveUnit(unit: SEUnitRealmObject, toLand: SELandRealmObject) {

@@ -7,7 +7,6 @@ import androidx.lifecycle.liveData
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
-import jp.co.my.mysen.model.SEGameBalance
 import jp.co.my.mysen.realm.*
 import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
@@ -20,7 +19,7 @@ object HttpClient {
 
 class SEFieldViewModel: ViewModel() {
 
-    fun loadObject(balance: SEGameBalance): List<SELandRealmObject> {
+    fun loadObject(playerObject: SEPlayerRealmObject): List<SELandRealmObject> {
         val realm = Realm.getDefaultInstance()
         var lands: List<SELandRealmObject> = realm.where<SELandRealmObject>().findAll()
         if (0 < lands.count()) {
@@ -39,8 +38,8 @@ class SEFieldViewModel: ViewModel() {
                     val land = realm.createObject<SELandRealmObject>()
                     land.setup(
                         type,
-                        index % balance.fieldNumberOfX,
-                        index / balance.fieldNumberOfY
+                        index % playerObject.fieldNumberOfX,
+                        index / playerObject.fieldNumberOfY
                     )
                     land
                 }
