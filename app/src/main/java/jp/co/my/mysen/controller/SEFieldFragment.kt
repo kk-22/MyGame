@@ -82,12 +82,6 @@ class SEFieldFragment: Fragment() {
             is Phase.FreeOrder -> {
             }
             is Phase.SelectDestination -> {
-                if (prevPhase.units.first().destinationLand == null) {
-                    // 出撃をキャンセル
-                    Realm.getDefaultInstance().executeTransaction {
-                        fieldView.enterUnits(prevPhase.units)
-                    }
-                }
             }
             is Phase.Advance -> timer.cancel()
             is Phase.Pause -> {
@@ -182,6 +176,8 @@ class SEFieldFragment: Fragment() {
                             val unit = realm.createObject<SEUnitRealmObject>()
                             unit.startingLand = land
                             unit.currentLand = land
+                            unit.destinationLand = land
+                            unit.route = SERouteRealmObject.firstRoute(unit)
                             unit.general = realm.where<SEGeneralRealmObject>().findFirst()
                             fieldView.moveUnit(unit, land)
                             setPhase(Phase.SelectDestination(arrayListOf(unit)))
@@ -189,7 +185,9 @@ class SEFieldFragment: Fragment() {
                         fieldView.highlightLands(listOf(land))
                     } else {
                         setPhase(Phase.SelectDestination(land.unitObjects))
-                        fieldView.highlightLands(land.unitObjects.first()!!.remainingRouteLands()!!)
+                        val unit = land.unitObjects.first()
+                        val lands = unit!!.remainingRouteLands()
+                         fieldView.highlightLands(lands!!)
                     }
                 }
                 is Phase.SelectDestination -> {
