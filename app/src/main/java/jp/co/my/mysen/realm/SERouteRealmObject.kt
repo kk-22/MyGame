@@ -28,6 +28,10 @@ open class SERouteRealmObject: RealmObject() {
             }
         }
 
+        fun firstRoute(unit: SEUnitRealmObject): SERouteRealmObject {
+            return TempRoute(arrayListOf(unit.startingLand!!), 0).castToObject()
+        }
+
         fun bestRoute(unit: SEUnitRealmObject,
                       destinationLand: SELandRealmObject,
                       fieldView: SEFieldView): SERouteRealmObject? {
