@@ -18,13 +18,20 @@ open class SELandRealmObject: RealmObject() {
     var pointX = 0.0f
     var pointY = 0.0f
     var unitObjects: RealmList<SEUnitRealmObject> = RealmList()
+    var governingCountry: SECountryRealmObject? = null // 拠点を支配する国。拠点以外は常にnull
 
-    fun setup(type: Type, x: Int, y: Int) {
+    fun setup(type: Type, x: Int, y: Int, country: SECountryRealmObject? = null) {
         this.type = type
         this.x = x
         this.y = y
         pointX = (SEFieldView.LAND_WIDTH_AND_HEIGHT * x + SEFieldView.LAND_MARGIN * (x + 1)).toFloat()
         pointY = (SEFieldView.LAND_WIDTH_AND_HEIGHT * y + SEFieldView.LAND_MARGIN * (y + 1)).toFloat()
+        if (type.isBase()) {
+            if (country == null) {
+                throw IllegalArgumentException("拠点のsetupメソッドはcountry引数が必須")
+            }
+            governingCountry = country
+        }
     }
 
     fun movingCost(unit: SEUnitRealmObject): Int {
@@ -45,5 +52,9 @@ open class SELandRealmObject: RealmObject() {
         Mountain("山", -1, R.drawable.se_land_mountain),
         Fort("砦", 50, R.drawable.se_land_fort),
         ;
+
+        fun isBase(): Boolean {
+            return this == Fort
+        }
     }
 }

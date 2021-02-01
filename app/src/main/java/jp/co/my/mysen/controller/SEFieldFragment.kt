@@ -170,7 +170,11 @@ class SEFieldFragment: Fragment() {
             fieldView.clearHighlight()
             when (val p = phase) {
                 Phase.FreeOrder -> {
-                    if (land.unitObjects.isEmpty()) {
+                    if (!land.type.isBase()) {
+                        "拠点以外の地形をタップ".toast(context!!)
+                    } else if (!land.governingCountry!!.isPlayerCountry) {
+                        ("CPUの拠点です").toast(context!!)
+                    } else if (land.unitObjects.isEmpty()) {
                         val realm = Realm.getDefaultInstance()
                         realm.executeTransaction {
                             val unit = realm.createObject<SEUnitRealmObject>()
