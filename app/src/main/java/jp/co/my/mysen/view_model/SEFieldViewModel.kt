@@ -34,12 +34,15 @@ class SEFieldViewModel: ViewModel() {
                 SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Fort,SELandRealmObject.Type.Grass,SELandRealmObject.Type.Grass,
             )
             realm.executeTransaction {
+                val playerCountry = it.where<SECountryRealmObject>().equalTo("isPlayerCountry", true).findFirst()
+                val cpuCountry = it.where<SECountryRealmObject>().equalTo("isPlayerCountry", false).findFirst()
                 lands = mockTypes.mapIndexed { index, type ->
                     val land = realm.createObject<SELandRealmObject>()
                     land.setup(
                         type,
                         index % playerObject.fieldNumberOfX,
-                        index / playerObject.fieldNumberOfY
+                        index / playerObject.fieldNumberOfY,
+                        if (index <= mockTypes.count() / 2) cpuCountry else playerCountry
                     )
                     land
                 }
@@ -58,8 +61,7 @@ class SEFieldViewModel: ViewModel() {
             }
             val realm = Realm.getDefaultInstance()
             realm.beginTransaction()
-            // 書き込み
-
+            // 既存データ削除
             arrayOf(SECountryRealmObject::class,
                 SEGeneralRealmObject::class,
                 SELandRealmObject::class,
@@ -67,7 +69,7 @@ class SEFieldViewModel: ViewModel() {
                 SEUnitRealmObject::class,).forEach {
                 realm.delete(it.java)
             }
-
+            // 取得データ保存
             realm.createAllFromJson(SECountryRealmObject::class.java, countryJson)
             realm.createAllFromJson(SEGeneralRealmObject::class.java, generalJson)
             // リレーションシップ登録
@@ -76,6 +78,10 @@ class SEFieldViewModel: ViewModel() {
             generals.forEach {
                 it.country = countries[it.country_id.toInt()]
             }
+
+            // 正式実装ではプレイヤーの操作によって登録するパラメータを仮設定
+            countries.first()?.isPlayerCountry = true
+
             realm.commitTransaction()
             emit(true)
         }

@@ -10,4 +10,6 @@ open class SECountryRealmObject: RealmObject() {
 
     @Required
     var name: String = ""
+
+    var isPlayerCountry: Boolean = false // プレイヤーが操作する国ならtrue
 }
