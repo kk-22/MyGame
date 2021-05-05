@@ -167,6 +167,8 @@ class SEFieldFragment: Fragment() {
 
     private inner class FieldViewListener : SEFieldView.Listener {
         override fun onClickLand(land: SELandRealmObject) {
+            binding.infoStackView.updateLand(land)
+
             fieldView.clearHighlight()
             when (val p = phase) {
                 Phase.FreeOrder -> {
